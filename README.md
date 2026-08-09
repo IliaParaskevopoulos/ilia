@@ -4,6 +4,7 @@ Product marketing system, built one small piece at a time.
 
 ## Agents
 
-- [`agents/market-sizing`](agents/market-sizing/prompt.md) — market
-  sizing agent (TAM/SAM/SOM via top-down + bottom-up research, with a
-  worked [example run](agents/market-sizing/example-run.md)).
+[`agents/README.md`](agents/README.md) — the Market Intelligence Agent:
+five modules (sizing, competitors & substitutes, barriers to entry, buyer
+concentration, demand drivers) sharing one input schema and one set of
+sourcing/confidence conventions, composing into a single report.
