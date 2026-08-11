@@ -1,0 +1,22 @@
+{
+  "name": "market-intel-newsletter",
+  "private": true,
+  "type": "module",
+  "version": "0.1.0",
+  "scripts": {
+    "research": "tsx src/index.ts",
+    "send": "tsx src/send.ts",
+    "sample": "tsx src/sample.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.116.0",
+    "dotenv": "^16.4.5",
+    "resend": "^6.19.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.9.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3"
+  }
+}

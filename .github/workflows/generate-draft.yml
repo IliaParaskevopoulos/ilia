@@ -1,0 +1,39 @@
+name: Generate weekly briefing draft
+
+on:
+  schedule:
+    - cron: "0 6 * * 1" # Monday 06:00 UTC
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - run: npm ci
+
+      - name: Research and draft
+        run: npm run research
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+
+      - name: Open a PR with the draft(s)
+        uses: peter-evans/create-pull-request@v6
+        with:
+          commit-message: "Weekly briefing draft — ${{ github.run_number }}"
+          branch: draft/weekly-${{ github.run_number }}
+          title: "Weekly briefing draft — run ${{ github.run_number }}"
+          body: |
+            Auto-generated market intelligence draft(s) for this week.
+
+            Review the HTML file(s) under `drafts/`. Merging this PR sends the briefing to that company's subscribers.
+          add-paths: drafts/**

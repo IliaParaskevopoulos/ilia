@@ -1,0 +1,37 @@
+name: Send approved briefing
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - "drafts/**"
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - run: npm ci
+
+      - name: Find draft files added/changed by this push
+        id: changed
+        run: git diff --name-only HEAD^ HEAD -- 'drafts/**/*.html' > changed_files.txt
+
+      - name: Send each changed draft
+        run: |
+          while IFS= read -r file; do
+            [ -z "$file" ] && continue
+            company_id=$(basename "$(dirname "$file")")
+            echo "Sending $file for company $company_id"
+            npx tsx src/send.ts "$file" "$company_id"
+          done < changed_files.txt
+        env:
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          FROM_EMAIL: ${{ secrets.FROM_EMAIL }}

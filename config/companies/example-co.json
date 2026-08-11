@@ -1,0 +1,8 @@
+{
+  "id": "example-co",
+  "companyName": "Example Co",
+  "market": "Enterprise Data Infrastructure",
+  "competitors": ["Vantage Cloud", "Ferrovia Systems"],
+  "trackedTopics": ["competitors", "regulation", "pricing", "funding_ma", "supply_chain", "key_customers"],
+  "subscribers": ["you@example.com"]
+}
