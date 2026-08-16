@@ -1,0 +1,43 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// One row per client. `content` holds the full SalesPlayKit JSON
+// (see src/lib/content-types.ts) — simplest possible model for now;
+// each company's kit is opaque JSON rather than normalized tables.
+model Company {
+  id             String   @id @default(cuid())
+  slug           String   @unique
+  name           String
+  // SHA-256 hex of the access code we hand the client. The plaintext
+  // code is never stored — only shown once at creation time.
+  accessCodeHash String   @unique
+  tier           String // "teaser" | "full"
+  content        Json
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  events AnalyticsEvent[]
+}
+
+// One row per view/download so usage can be sliced by company, section,
+// or individual asset.
+model AnalyticsEvent {
+  id        String   @id @default(cuid())
+  companyId String
+  company   Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  kind      String // "view" | "download"
+  section   String // e.g. "battlecards", "imageAssets"
+  itemId    String? // asset id within the section; null = section-level page view
+  itemTitle String?
+  path      String
+  createdAt DateTime @default(now())
+
+  @@index([companyId, createdAt])
+  @@index([companyId, section, itemId])
+}

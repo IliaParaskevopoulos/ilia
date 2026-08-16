@@ -1,12 +1,15 @@
-import { getKit } from "@/lib/content";
+import { requireCurrentCompany, logView } from "@/lib/content";
 import { PageShell, SectionCard } from "@/components/PageShell";
 
-export default function MarketReportsPage() {
-  const { company, marketReports } = getKit();
+export default async function MarketReportsPage() {
+  const current = await requireCurrentCompany();
+  const { company, marketReports } = current.kit;
+  await logView(current.id, "market-reports", "/market-reports");
 
   return (
     <PageShell
       company={company}
+      kit={current.kit}
       title="Market Reports"
       description="Context and stats to build credibility in discovery and share as low-pressure follow-up content."
     >

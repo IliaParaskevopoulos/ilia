@@ -60,6 +60,7 @@ export interface CompetitorProfile {
 
 export interface Battlecard {
   id: string;
+  product: string; // which of the company's products/lines this card is for
   competitorName: string;
   segment?: string; // which ICP segment this battlecard applies to
   positioningStatement: string; // one paragraph: how to frame us vs them
@@ -142,14 +143,18 @@ export interface SalesDeck {
   lastUpdated?: string; // ISO date
 }
 
+// Rendered as a table (one row per idea) rather than cards — this is a
+// brainstorm/backlog artifact meant to be scanned at a glance, not read
+// one at a time.
 export interface WebinarIdea {
   id: string;
-  title: string;
-  description: string;
-  targetAudience: string;
+  contentIdea: string; // working title / topic
+  value: string; // what the audience walks away with — the hook
+  targetAudience: string; // ICP segment
+  productMarketed: string; // which product/feature this promotes
   format: "live" | "recorded" | "panel" | "workshop";
-  keyTakeaways: string[];
-  suggestedSpeakers?: string[];
+  funnelStage: "top" | "middle" | "bottom";
+  cta: string; // suggested call to action
 }
 
 // Every section is an array so a client's kit can omit any content type

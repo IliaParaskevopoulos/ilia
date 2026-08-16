@@ -1,21 +1,23 @@
 import type { ReactNode } from "react";
 import { Sidebar } from "@/components/Sidebar";
-import type { CompanyMeta } from "@/lib/content-types";
+import type { CompanyMeta, SalesPlayKit } from "@/lib/content-types";
 
 export function PageShell({
   company,
+  kit,
   title,
   description,
   children,
 }: {
   company: CompanyMeta;
+  kit: SalesPlayKit;
   title: string;
   description?: string;
   children: ReactNode;
 }) {
   return (
     <div className="flex min-h-screen bg-neutral-950 text-neutral-100">
-      <Sidebar company={company} />
+      <Sidebar company={company} kit={kit} />
       <main className="min-w-0 flex-1">
         <div className="mx-auto max-w-4xl px-8 py-10">
           <header className="mb-8">

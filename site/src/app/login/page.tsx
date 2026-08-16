@@ -1,24 +1,18 @@
-import { getKit } from "@/lib/content";
-
 export default async function LoginPage({
   searchParams,
 }: {
   searchParams: Promise<{ next?: string; error?: string }>;
 }) {
   const { next, error } = await searchParams;
-  const { company } = getKit();
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-neutral-950 text-neutral-100 px-4">
       <div className="w-full max-w-sm">
         <div className="mb-8 text-center">
-          <div
-            className="mx-auto mb-4 h-10 w-10 rounded-lg"
-            style={{ background: company.primaryColor || "#6366f1" }}
-          />
-          <h1 className="text-xl font-semibold">{company.name} Sales Plays</h1>
+          <div className="mx-auto mb-4 h-10 w-10 rounded-lg bg-indigo-600" />
+          <h1 className="text-xl font-semibold">Sales Plays</h1>
           <p className="mt-1 text-sm text-neutral-400">
-            Private sales enablement hub. Enter your access code.
+            Enter the access code you were given.
           </p>
         </div>
 
@@ -35,10 +29,12 @@ export default async function LoginPage({
             <input
               id="code"
               name="code"
-              type="password"
+              type="text"
+              autoComplete="off"
+              placeholder="XXXX-XXXX-XXXX"
               required
               autoFocus
-              className="w-full rounded-lg border border-neutral-700 bg-neutral-950 px-3 py-2 text-sm outline-none focus:border-indigo-500"
+              className="w-full rounded-lg border border-neutral-700 bg-neutral-950 px-3 py-2 text-sm font-mono uppercase tracking-wider outline-none focus:border-indigo-500"
             />
           </div>
           {error ? (

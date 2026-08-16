@@ -120,6 +120,7 @@
   "battlecards": [
     {
       "id": "battlecard-monteguard",
+      "product": "Northwind Pipeline Observability",
       "competitorName": "MonteGuard",
       "segment": "icp-data-platform-lead",
       "positioningStatement": "MonteGuard is built for large, mature data teams with dedicated platform headcount to configure and maintain it. Northwind is built to be useful on day one for lean teams — anomaly detection and lineage work out of the box, without a multi-week implementation.",
@@ -333,19 +334,33 @@
   "webinarIdeas": [
     {
       "id": "webinar-data-downtime",
-      "title": "The State of Data Downtime: Live Q&A",
-      "description": "Walk through the market report findings with a guest data leader, then open for audience Q&A on their own incident stories.",
+      "contentIdea": "The State of Data Downtime: Live Q&A",
+      "value": "Walks away knowing how their detection time compares to peers, and a framework for building the internal case for observability tooling.",
       "targetAudience": "icp-data-platform-lead",
+      "productMarketed": "Northwind Pipeline Observability",
       "format": "panel",
-      "keyTakeaways": [
-        "Why detection time, not incident count, is the metric that matters",
-        "How to build the internal case for observability tooling",
-        "What a 'good' incident response process actually looks like"
-      ],
-      "suggestedSpeakers": [
-        "Northwind Head of Product Marketing",
-        "Guest: a customer's Head of Data Platform"
-      ]
+      "funnelStage": "top",
+      "cta": "Start a free pipeline health check"
+    },
+    {
+      "id": "webinar-migration-playbook",
+      "contentIdea": "Migrating to Northwind in a Week, Not a Quarter",
+      "value": "A concrete, step-by-step migration playbook from a team that's done it, reducing perceived implementation risk.",
+      "targetAudience": "icp-vp-eng-scaleup",
+      "productMarketed": "Northwind Pipeline Observability",
+      "format": "recorded",
+      "funnelStage": "middle",
+      "cta": "Book a migration scoping call"
+    },
+    {
+      "id": "webinar-roi-workshop",
+      "contentIdea": "Build Your Data Downtime ROI Case",
+      "value": "A live, working ROI calculator session — attendees leave with their own numbers to bring to their VP.",
+      "targetAudience": "icp-vp-eng-scaleup",
+      "productMarketed": "Northwind Pipeline Observability",
+      "format": "workshop",
+      "funnelStage": "bottom",
+      "cta": "See the ROI calculator at northwindanalytics.com/roi"
     }
   ]
 }

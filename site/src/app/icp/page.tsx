@@ -1,4 +1,4 @@
-import { getKit } from "@/lib/content";
+import { requireCurrentCompany, logView } from "@/lib/content";
 import { PageShell, SectionCard, Tag } from "@/components/PageShell";
 
 function List({ title, items }: { title: string; items: string[] }) {
@@ -20,12 +20,15 @@ function List({ title, items }: { title: string; items: string[] }) {
   );
 }
 
-export default function ICPPage() {
-  const { company, icpSegments } = getKit();
+export default async function ICPPage() {
+  const current = await requireCurrentCompany();
+  const { company, icpSegments } = current.kit;
+  await logView(current.id, "icp", "/icp");
 
   return (
     <PageShell
       company={company}
+      kit={current.kit}
       title="Target Audience / ICP Research"
       description="Who to prioritize, why they buy, and how to recognize them early in a deal."
     >

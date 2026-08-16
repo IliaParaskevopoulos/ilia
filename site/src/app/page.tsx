@@ -1,10 +1,12 @@
 import Link from "next/link";
-import { getKit } from "@/lib/content";
+import { requireCurrentCompany, logView } from "@/lib/content";
 import { PageShell, SectionCard } from "@/components/PageShell";
 
-export default function Home() {
-  const kit = getKit();
+export default async function Home() {
+  const current = await requireCurrentCompany();
+  const { kit } = current;
   const { company } = kit;
+  await logView(current.id, "dashboard", "/");
 
   const stats = [
     { href: "/icp", label: "ICP Segments", value: kit.icpSegments.length },
@@ -13,11 +15,16 @@ export default function Home() {
     { href: "/market-reports", label: "Market Reports", value: kit.marketReports.length },
     { href: "/images", label: "Image Assets", value: kit.imageAssets.length },
     { href: "/videos", label: "Video Scripts", value: kit.videoScripts.length },
-  ];
+    { href: "/certifications", label: "Certifications", value: kit.certifications.length },
+    { href: "/brochures", label: "Brochures", value: kit.brochures.length },
+    { href: "/sales-decks", label: "Sales Decks", value: kit.salesDecks.length },
+    { href: "/webinars", label: "Webinar Ideas", value: kit.webinarIdeas.length },
+  ].filter((s) => s.value > 0);
 
   return (
     <PageShell
       company={company}
+      kit={kit}
       title={`Welcome to the ${company.name} sales play kit`}
       description={company.tagline}
     >

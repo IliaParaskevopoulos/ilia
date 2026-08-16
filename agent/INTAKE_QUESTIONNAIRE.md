@@ -65,6 +65,11 @@ For each named competitor (start with the 2-4 that come up most in deals):
 4. Do you have a stat, case study, or customer quote that helps with this
    specific objection?
 5. Is there an objection reps currently handle badly or inconsistently?
+6. When a rep hears this, is it usually the *real* blocker, or does
+   something else come up once this one's resolved? (This tells the
+   agent whether the response needs an isolating question — "if we
+   solve that, is there anything else in the way?" — before reps invest
+   in answering it.)
 
 ## 5. Proof points & market context
 

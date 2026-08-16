@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { getKit } from "@/lib/content";
+import { getCurrentCompany } from "@/lib/content";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -14,10 +14,12 @@ const geistMono = Geist_Mono({
 });
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { company } = getKit();
+  const current = await getCurrentCompany();
   return {
-    title: `${company.name} Sales Plays`,
-    description: `Private sales enablement hub for ${company.name}.`,
+    title: current ? `${current.name} Sales Plays` : "Sales Plays",
+    description: current
+      ? `Private sales enablement hub for ${current.name}.`
+      : "Private sales enablement hub.",
     robots: { index: false, follow: false },
   };
 }

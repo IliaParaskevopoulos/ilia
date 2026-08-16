@@ -1,12 +1,15 @@
-import { getKit } from "@/lib/content";
+import { requireCurrentCompany, logView } from "@/lib/content";
 import { PageShell, SectionCard, Tag } from "@/components/PageShell";
 
-export default function VideosPage() {
-  const { company, videoScripts } = getKit();
+export default async function VideosPage() {
+  const current = await requireCurrentCompany();
+  const { company, videoScripts } = current.kit;
+  await logView(current.id, "videos", "/videos");
 
   return (
     <PageShell
       company={company}
+      kit={current.kit}
       title="Video Scripts"
       description="Scripted outlines for sales and demo videos — scene, voiceover, and on-screen text."
     >

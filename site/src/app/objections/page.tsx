@@ -1,4 +1,4 @@
-import { getKit } from "@/lib/content";
+import { requireCurrentCompany, logView } from "@/lib/content";
 import { PageShell, SectionCard, Tag } from "@/components/PageShell";
 
 const CATEGORY_LABEL: Record<string, string> = {
@@ -11,12 +11,15 @@ const CATEGORY_LABEL: Record<string, string> = {
   other: "Other",
 };
 
-export default function ObjectionsPage() {
-  const { company, objections } = getKit();
+export default async function ObjectionsPage() {
+  const current = await requireCurrentCompany();
+  const { company, objections } = current.kit;
+  await logView(current.id, "objections", "/objections");
 
   return (
     <PageShell
       company={company}
+      kit={current.kit}
       title="Objection Handling"
       description="Verbatim responses for the objections you'll actually hear, with the concern underneath each one."
     >
