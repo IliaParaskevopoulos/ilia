@@ -80,9 +80,10 @@ npm install
    - `DATABASE_URL` — your Postgres connection string
    - `AUTH_SECRET` — random string signing session cookies (`openssl rand -hex 32`)
    - `ADMIN_PASSWORD` — your own password for `/admin`
-2. Run migrations: `npx prisma migrate deploy` (or `migrate dev` locally).
-3. Deploy `site/` (e.g. to Vercel).
-4. Go to `/admin`, log in with `ADMIN_PASSWORD`, click **New company**,
+2. Deploy `site/` (e.g. to Vercel, with root directory set to `site`).
+   `npm run build` runs `prisma migrate deploy` before building, so
+   migrations apply automatically on every deploy — no separate step.
+3. Go to `/admin`, log in with `ADMIN_PASSWORD`, click **New company**,
    paste the kit JSON, pick a tier, and submit. You get back a one-time
    access code — save it, it's hashed in the DB and never shown again.
 5. Share the client's URL + code. They log in at `/login`.
