@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#4338ca"/>
+      <stop offset="100%" stop-color="#0ea5e9"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#g1)"/>
+  <text x="60" y="320" font-family="Arial, sans-serif" font-size="56" fill="white" font-weight="700">Stop shipping blind.</text>
+  <text x="60" y="390" font-family="Arial, sans-serif" font-size="56" fill="white" font-weight="700">Ship with Northwind.</text>
+  <text x="60" y="450" font-family="Arial, sans-serif" font-size="24" fill="#e0e7ff">Data observability for teams that can't afford bad data.</text>
+</svg>

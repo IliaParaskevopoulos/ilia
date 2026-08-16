@@ -1,0 +1,298 @@
+{
+  "company": {
+    "name": "Northwind Analytics",
+    "slug": "demo",
+    "tagline": "Data observability for teams that can't afford bad data.",
+    "primaryColor": "#4338ca",
+    "lastUpdated": "2026-08-01",
+    "preparedBy": "Product Marketing x Sales Plays Agent"
+  },
+  "icpSegments": [
+    {
+      "id": "icp-data-platform-lead",
+      "name": "Head of Data Platform, Series B-D SaaS",
+      "description": "Owns the data infra/pipeline team at a growth-stage B2B SaaS company. Accountable when dashboards break or execs lose trust in reported numbers.",
+      "firmographics": [
+        "80-1500 employees",
+        "B2B SaaS, fintech, or marketplace",
+        "Modern data stack: Snowflake/BigQuery + dbt + Airflow/Dagster",
+        "5-40 person data/analytics org",
+        "North America or EU"
+      ],
+      "buyerRole": "Head of Data / Director of Data Platform / Analytics Engineering Lead",
+      "painPoints": [
+        "Finds out about broken dashboards from a VP, not from monitoring",
+        "No single view of pipeline health across ingestion, transformation, and BI",
+        "Team spends 30%+ of time firefighting instead of building",
+        "Existing monitoring is a patchwork of dbt tests + Slack alerts + tribal knowledge"
+      ],
+      "goals": [
+        "Catch data incidents before stakeholders do",
+        "Reduce time-to-detect and time-to-resolve for pipeline failures",
+        "Give execs a reason to trust the numbers again",
+        "Free up engineers from manual firefighting"
+      ],
+      "triggerEvents": [
+        "A high-visibility bad-data incident reached a board deck or exec review",
+        "Just adopted or is migrating to dbt / a modern data stack",
+        "Data team headcount doubled in the last 12 months",
+        "New CDO/VP Data hired and mandated to 'fix trust in data'"
+      ],
+      "whereToFindThem": [
+        "dbt Slack community",
+        "Locally Optimistic community",
+        "Data council conferences (Coalesce, Snowflake Summit)",
+        "LinkedIn posts about 'data downtime' or 'data trust'"
+      ],
+      "disqualifiers": [
+        "Still on spreadsheets / no warehouse in place",
+        "Data team is a single person with no budget authority",
+        "Company-wide freeze on new tooling spend"
+      ]
+    },
+    {
+      "id": "icp-vp-eng-scaleup",
+      "name": "VP Engineering, Scale-up (data as a byproduct, not the product)",
+      "description": "Owns engineering broadly; data pipeline is one of several systems they're accountable for, usually understaffed relative to its importance.",
+      "firmographics": [
+        "150-800 employees",
+        "Product-led or sales-led B2B software",
+        "Data team is 1-5 people embedded inside engineering",
+        "Series B+"
+      ],
+      "buyerRole": "VP Engineering / Head of Platform Engineering",
+      "painPoints": [
+        "Data incidents show up as generic 'engineering is slow' complaints from the business",
+        "No dedicated data reliability owner, so issues get triaged reactively",
+        "Hard to justify headcount for a dedicated data platform hire"
+      ],
+      "goals": [
+        "Reduce cross-team firefighting load on engineering",
+        "Get a tool that gives non-technical stakeholders self-serve visibility",
+        "Avoid hiring a dedicated data reliability engineer this year"
+      ],
+      "triggerEvents": [
+        "Just went through a funding round and is under pressure to show operational maturity",
+        "A customer-facing feature broke because of an upstream data issue"
+      ],
+      "whereToFindThem": [
+        "Engineering leadership Slack communities",
+        "Referrals from existing data platform customers"
+      ],
+      "disqualifiers": [
+        "No warehouse / BI layer at all",
+        "Engineering org under 20 people"
+      ]
+    }
+  ],
+  "marketReports": [
+    {
+      "id": "report-data-downtime-2026",
+      "title": "The State of Data Downtime, 2026",
+      "summary": "Data incidents are getting more frequent and more expensive as stacks get more complex, but most teams still detect issues reactively — from a Slack complaint, not a monitor.",
+      "publishedDate": "2026-06-15",
+      "sections": [
+        {
+          "heading": "Why this matters now",
+          "body": "As companies adopt modern data stacks (Snowflake/BigQuery + dbt + orchestration), pipeline complexity has grown faster than the tooling teams use to monitor it. The result: more failure points, and less visibility into any single one of them.\n\nThis creates a specific, recurring buying trigger — a bad-data incident that reaches leadership — which is the single strongest signal for outbound and inbound alike."
+        },
+        {
+          "heading": "What's driving urgency",
+          "body": "- Modern data stack adoption continues to accelerate among Series B+ SaaS companies\n- Data teams are growing headcount faster than they're growing tooling maturity, widening the observability gap\n- Executive dashboards are increasingly tied to board reporting, raising the cost of a bad number reaching a board deck"
+        },
+        {
+          "heading": "Buying implication",
+          "body": "Deals move fastest when triggered by a recent, specific incident. Discovery should always probe for 'tell me about the last time a bad number made it to a dashboard or a deck' — the answer usually reveals both the pain and the internal champion."
+        }
+      ],
+      "keyStats": [
+        { "label": "Median time-to-detect a data incident without observability tooling", "value": "~4 hours (often via a stakeholder complaint)", "source": "Northwind customer interviews, 2026" },
+        { "label": "Data teams that grew headcount in the last 12 months", "value": "Majority of surveyed Series B+ data orgs", "source": "Northwind market scan, 2026" },
+        { "label": "Primary detection method reported by teams without observability tooling", "value": "Manual dashboard checks or downstream complaints", "source": "Northwind customer interviews, 2026" }
+      ],
+      "sources": [
+        "Northwind customer discovery interviews (n=24), Q2 2026",
+        "Public job-posting analysis of data team growth at Series B-D SaaS companies"
+      ]
+    }
+  ],
+  "battlecards": [
+    {
+      "id": "battlecard-monteguard",
+      "competitorName": "MonteGuard",
+      "segment": "icp-data-platform-lead",
+      "positioningStatement": "MonteGuard is built for large, mature data teams with dedicated platform headcount to configure and maintain it. Northwind is built to be useful on day one for lean teams — anomaly detection and lineage work out of the box, without a multi-week implementation.",
+      "competitor": {
+        "name": "MonteGuard",
+        "oneLiner": "Enterprise data observability platform, strong in large-scale anomaly detection.",
+        "strengths": [
+          "Deep, mature anomaly detection models",
+          "Strong brand recognition among enterprise data teams",
+          "Broad connector library"
+        ],
+        "weaknesses": [
+          "Long implementation (often 4-8 weeks to real value)",
+          "Pricing scales aggressively with data volume, punishing growth",
+          "Requires dedicated ownership to tune and maintain"
+        ],
+        "pricingNotes": "Typically priced on data volume/table count; costs escalate quickly for fast-growing data estates. Enterprise contracts, annual commit expected.",
+        "whenTheyWin": [
+          "Buyer has a dedicated, well-staffed data platform team (5+ people) with time to own the tool",
+          "Enterprise buyer with existing budget and a mandate for a 'best of breed' name"
+        ],
+        "whenWeWin": [
+          "Lean data team (1-10 people) that needs value fast without a dedicated observability owner",
+          "Budget-conscious buyer who needs predictable pricing as data volume grows",
+          "Team already using dbt and wants observability that fits that workflow natively"
+        ],
+        "landmines": [
+          "Ask: 'Who on your team will own tuning MonteGuard's anomaly thresholds week to week?'",
+          "Ask: 'What happens to your MonteGuard bill when your data volume doubles next year?'"
+        ],
+        "proofPoints": [
+          "Customers report going live with meaningful monitoring coverage inside the first week",
+          "Predictable, seat-and-scope based pricing rather than pure volume-based pricing"
+        ]
+      },
+      "talkTrack": [
+        "Open by acknowledging MonteGuard is a credible, well-known name — don't trash it.",
+        "Ask how big the team is that would own the tool day-to-day; surface the staffing gap if it's small.",
+        "Reframe the decision from 'most powerful platform' to 'fastest path to a team actually trusting its data again.'",
+        "Anchor on time-to-value: what would go live in week one versus week six.",
+        "Close by offering a scoped pilot on their actual highest-risk pipeline."
+      ],
+      "doNotSay": [
+        "Don't claim feature parity on advanced anomaly detection — MonteGuard is genuinely stronger there for large, mature use cases.",
+        "Don't disparage MonteGuard's brand or customers directly."
+      ],
+      "battleTestedQuotes": [
+        "\"We're not trying to out-enterprise MonteGuard — we're trying to get your team to trust its data by next Friday, not next quarter.\""
+      ]
+    }
+  ],
+  "objections": [
+    {
+      "id": "obj-too-expensive",
+      "category": "price",
+      "objection": "This feels expensive for where we are right now.",
+      "underlyingConcern": "They can't yet tie the cost to an avoided incident, or they're worried about justifying a new line item internally.",
+      "response": "Ask them to put a number on the last data incident: how long it took to catch, how many people got pulled in, and what it cost in trust with the exec team or a customer. Anchor the price against that, not against a hypothetical budget line.",
+      "followUpQuestions": [
+        "What did the last bad-data incident actually cost you — in time, in trust, or in a customer relationship?",
+        "If this tool had caught that issue in minutes instead of a stakeholder complaint, what would that have been worth?"
+      ],
+      "supportingProof": [
+        "Median time-to-detect without observability tooling runs around 4 hours, often triggered by a stakeholder complaint rather than a monitor."
+      ]
+    },
+    {
+      "id": "obj-build-it-ourselves",
+      "category": "product",
+      "objection": "Can't we just build this with dbt tests and some Slack alerts?",
+      "underlyingConcern": "They've already invested effort in a DIY solution and are worried about sunk cost or looking like they can't build it themselves.",
+      "response": "Validate that dbt tests are a great start — and explain that they cover known failure modes, not unknown ones (schema drift, freshness, volume anomalies you didn't think to test for). Position Northwind as the layer that catches what you didn't know to check for, not a replacement for good dbt hygiene.",
+      "followUpQuestions": [
+        "How many dbt tests are you maintaining today, and who owns writing new ones as the pipeline grows?",
+        "What's caught the last few incidents — a test you wrote in advance, or someone noticing something looked off?"
+      ],
+      "supportingProof": [
+        "Most incidents reported by prospects were the kind no one had written a test for in advance — schema changes, silent volume drops, stale data."
+      ]
+    },
+    {
+      "id": "obj-not-a-priority",
+      "category": "timing",
+      "objection": "Data quality isn't a top priority for us this quarter.",
+      "underlyingConcern": "No recent painful incident has made this visible/urgent yet, or it's being deprioritized against feature work.",
+      "response": "Don't push — ask what would need to happen for it to become a priority, and plant a flag: offer to be the call they make when (not if) a data incident happens. Leave them with the market report as a credibility-building resource in the meantime.",
+      "followUpQuestions": [
+        "What would have to happen for this to move up the list?",
+        "Who finds out first today when a dashboard number is wrong?"
+      ],
+      "supportingProof": [
+        "The State of Data Downtime, 2026 report — useful as a low-pressure follow-up resource."
+      ]
+    }
+  ],
+  "imageAssets": [
+    {
+      "id": "img-hero-1",
+      "title": "Primary hero — 'Stop shipping blind'",
+      "description": "Primary campaign hero image for landing pages and paid social.",
+      "useCase": "Website hero, paid social",
+      "url": "/demo/hero-1.svg",
+      "altText": "Northwind Analytics hero graphic reading 'Stop shipping blind. Ship with Northwind.'",
+      "tags": ["hero", "brand", "campaign"]
+    },
+    {
+      "id": "img-hero-2",
+      "title": "One-pager hero — '99.9% data uptime'",
+      "description": "Supporting hero image for sales one-pagers and battlecard headers.",
+      "useCase": "Sales one-pager, battlecard header",
+      "url": "/demo/hero-2.svg",
+      "altText": "Graphic reading '99.9% data uptime. Zero surprise outages.'",
+      "tags": ["one-pager", "battlecard", "stat"]
+    },
+    {
+      "id": "img-social-1",
+      "title": "Social carousel — '3 signs your pipeline is lying to you' (1/4)",
+      "description": "First slide of a 4-part LinkedIn carousel aimed at data platform leads.",
+      "useCase": "LinkedIn organic + paid",
+      "url": "/demo/social-1.svg",
+      "altText": "Square social graphic reading '3 signs your data pipeline is lying to you'",
+      "tags": ["social", "linkedin", "carousel"]
+    }
+  ],
+  "videoScripts": [
+    {
+      "id": "video-30s-teaser",
+      "title": "30-second product teaser — 'The 2am Slack message'",
+      "purpose": "Top-of-funnel awareness, paid social and website hero video",
+      "targetLength": "30 seconds",
+      "audience": "icp-data-platform-lead",
+      "scenes": [
+        {
+          "shot": "Close on a phone lighting up at night with a Slack notification: 'the dashboard numbers look wrong again'",
+          "voiceover": "It's 2am. And you're the one who finds out first — again.",
+          "onScreenText": "2:04 AM"
+        },
+        {
+          "shot": "Cut to a clean product UI showing a caught anomaly with a green 'resolved before impact' badge",
+          "voiceover": "Northwind catches it before your stakeholders do — schema drift, volume drops, stale data, all in one place.",
+          "onScreenText": "Detected in 4 minutes"
+        },
+        {
+          "shot": "Wide shot of a calm dashboard, team member closing laptop and relaxing",
+          "voiceover": "Ship with confidence. Sleep through the night.",
+          "onScreenText": "Northwind Analytics"
+        }
+      ],
+      "callToAction": "Start a free pipeline health check at northwindanalytics.com"
+    },
+    {
+      "id": "video-objection-price",
+      "title": "Objection-handling explainer — 'Is this worth it?'",
+      "purpose": "Mid-funnel nurture for prospects stuck on price objection",
+      "targetLength": "60-90 seconds",
+      "audience": "icp-vp-eng-scaleup",
+      "scenes": [
+        {
+          "shot": "Talking head, VP Engineering customer testimonial style",
+          "voiceover": "We almost didn't buy this. It felt like one more tool. Then I did the math on what our last incident actually cost us.",
+          "onScreenText": "Customer story"
+        },
+        {
+          "shot": "Simple animated cost comparison: hours lost vs. subscription cost",
+          "voiceover": "Engineer hours, a delayed launch, an exec who stopped trusting the dashboard — versus a predictable monthly cost.",
+          "onScreenText": "Do the math"
+        },
+        {
+          "shot": "Return to talking head",
+          "voiceover": "It paid for itself in the first incident it caught.",
+          "onScreenText": "northwindanalytics.com"
+        }
+      ],
+      "callToAction": "See the ROI calculator at northwindanalytics.com/roi"
+    }
+  ]
+}
