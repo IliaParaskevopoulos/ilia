@@ -5,7 +5,8 @@
     "tagline": "Data observability for teams that can't afford bad data.",
     "primaryColor": "#4338ca",
     "lastUpdated": "2026-08-01",
-    "preparedBy": "Product Marketing x Sales Plays Agent"
+    "preparedBy": "Product Marketing x Néstōr",
+    "tier": "full"
   },
   "icpSegments": [
     {
@@ -293,6 +294,58 @@
         }
       ],
       "callToAction": "See the ROI calculator at northwindanalytics.com/roi"
+    }
+  ],
+  "certifications": [
+    {
+      "id": "cert-soc2",
+      "title": "SOC 2 Type II Report",
+      "type": "compliance",
+      "description": "Independent audit covering security, availability, and confidentiality controls. Share under NDA when a prospect's security team requests it.",
+      "fileUrl": "/pending/cert-soc2.pdf",
+      "issuedBy": "Independent auditor",
+      "issuedDate": "2026-03-01",
+      "expiryDate": "2027-03-01",
+      "tags": ["security", "compliance", "procurement"]
+    }
+  ],
+  "brochures": [
+    {
+      "id": "brochure-overview",
+      "title": "Northwind Analytics — Product Overview",
+      "description": "Two-page leave-behind covering the core problem, product overview, and proof points.",
+      "useCase": "Leave-behind after first meeting",
+      "audience": "icp-data-platform-lead",
+      "fileUrl": "/pending/brochure-overview.pdf"
+    }
+  ],
+  "salesDecks": [
+    {
+      "id": "deck-discovery",
+      "title": "Discovery Call Deck",
+      "description": "Standard first-call deck: problem framing, product walkthrough, and proof points. Ends on a next-step ask, not pricing.",
+      "audience": "icp-data-platform-lead",
+      "fileUrl": "/pending/deck-discovery.pptx",
+      "slideCount": 12,
+      "lastUpdated": "2026-07-15"
+    }
+  ],
+  "webinarIdeas": [
+    {
+      "id": "webinar-data-downtime",
+      "title": "The State of Data Downtime: Live Q&A",
+      "description": "Walk through the market report findings with a guest data leader, then open for audience Q&A on their own incident stories.",
+      "targetAudience": "icp-data-platform-lead",
+      "format": "panel",
+      "keyTakeaways": [
+        "Why detection time, not incident count, is the metric that matters",
+        "How to build the internal case for observability tooling",
+        "What a 'good' incident response process actually looks like"
+      ],
+      "suggestedSpeakers": [
+        "Northwind Head of Product Marketing",
+        "Guest: a customer's Head of Data Platform"
+      ]
     }
   ]
 }

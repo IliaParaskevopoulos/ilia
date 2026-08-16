@@ -1,4 +1,4 @@
-# Sales Plays Agent
+# Néstōr
 
 A productized service: an AI "product marketer" agent that builds a
 client's **Sales Play Kit** — target audience research, battlecards,

@@ -1,4 +1,4 @@
-# Sales Plays Agent — Intake Questionnaire
+# Néstōr — Intake Questionnaire
 
 Used in **Step 2** of the workflow, after ingesting existing materials
 (`SYSTEM_PROMPT.md` Step 1). Only ask what wasn't already answered by the
