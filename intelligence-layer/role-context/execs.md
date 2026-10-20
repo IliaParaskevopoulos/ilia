@@ -1,12 +1,7 @@
-# Execs — who I answer to
+# Execs
 
-_Last updated: —_
+_Updated: 2026-10-20_
 
-<!-- Copy the block below per exec / stakeholder. -->
-
-## <Name> — <Role>
-- **Relationship:** <!-- direct manager, skip-level, peer exec, board -->
-- **What they care about:**
-- **How they want updates:** <!-- format, cadence, level of detail -->
-- **What frustrates them:**
-- **Notes:**
+| Who | Cares about | Updates |
+|---|---|---|
+| **CEO** — TBD | Devices sold · subscription retention · margin | TBD (cadence, format) |

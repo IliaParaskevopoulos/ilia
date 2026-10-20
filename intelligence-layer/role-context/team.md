@@ -1,12 +1,9 @@
-# Team — who reports to me
+# Team
 
-_Last updated: —_
+_Updated: 2026-10-20 · Patches proposed, confirm._
 
-<!-- Copy the block below per direct report. -->
-
-## <Name> — <Role>
-- **Patch:** <!-- territory, accounts, segment, product area -->
-- **KPIs:**
-- **Strengths:**
-- **Growth area:**
-- **Current focus / notes:**
+| PM | Patch | KPIs |
+|---|---|---|
+| **PM 1** — TBD | Pets | Devices sold · activation rate · churn |
+| **PM 2** — TBD | Seniors | Devices sold · Premium upgrades · churn |
+| **Ilias (me)** | Fleet | Devices per account · renewal rate · ARPA |
