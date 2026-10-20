@@ -1,112 +1,45 @@
 # Positioning
 
-_Updated: 2026-10-20 · Scores 0–1, directional estimates (verify)._
+_Updated: 2026-10-20 · Scores 0–10, higher = better for customer. Directional (verify). Source: `outputs/src/data.js`._
 
 ## Executive summary
-- **Where PAJ sits:** affordable, real-time 4G tracking across pets, people and vehicles, all in one app.
-- **Open space:** low price with real-time tracking. Only AirTag is cheaper, and it is not real-time.
-- **Threats:** Tractive owns pet brand, Webfleet/Samsara own fleet depth, AirTag owns "no subscription."
-- **Play:** own "one app, every tracker, honest price". Use breadth to grow devices per customer (goal 2).
+- **Pets:** only live tracker at a fair price.
+- **Seniors:** safety leader outside the home; simplify.
+- **Fleet:** easiest start; deepen logbook vs Vimcar.
+- **All ICPs:** broadest range, no lock-in. Moat for goal 2.
+- **Line:** one app, every tracker, honest price.
 
-**Method:** 8 buying variables, paired into 4 maps. Same 8 players on each. Score each 0–1, look for open quadrants.
+## Method
+8 variables = ICP buying criteria → 4 maps. Upper-right = win zone.
 
-| Map | X | Y |
-|---|---|---|
-| 1 | Price (TCO) | Real-time tracking |
-| 2 | Battery life | Portability (size/weight) |
-| 3 | Portfolio breadth | Business/fleet depth |
-| 4 | Ease of use | Safety features (SOS, alarms, geofence) |
+| Map | ICP | X | Y | Players |
+|---|---|---|---|---|
+| 1 | Pets | Affordability | Live tracking | PAJ, Tractive, Weenect, AirTag, Invoxia |
+| 2 | Seniors | Ease of use | Safety features | PAJ, Hausnotruf, Weenect, AirTag |
+| 3 | Fleet | Plug & play | Fleet depth | PAJ, Webfleet, Samsara, Vimcar, Invoxia, AirTag |
+| 4 | All · goal 2 | Portfolio breadth | Contract flexibility | All 9 |
 
----
-
-### Map 1 — Price vs real-time tracking
-```mermaid
-quadrantChart
-    x-axis Low price --> High price
-    y-axis Passive --> Real-time
-    quadrant-1 Premium live
-    quadrant-2 Value live
-    quadrant-3 Budget passive
-    quadrant-4 Poor value
-    PAJ: [0.30, 0.80]
-    Tractive: [0.55, 0.85]
-    Weenect: [0.50, 0.75]
-    AirTag: [0.10, 0.20]
-    Invoxia: [0.45, 0.45]
-    Hausnotruf: [0.80, 0.30]
-    Webfleet: [0.90, 0.90]
-    Vimcar: [0.70, 0.70]
-```
-→ PAJ leads "value live."
-
-### Map 2 — Battery life vs portability
-```mermaid
-quadrantChart
-    x-axis Short battery --> Long battery
-    y-axis Bulky --> Compact
-    quadrant-1 Ideal
-    quadrant-2 Small, short-lived
-    quadrant-3 Weak
-    quadrant-4 Long-lived, bulky
-    PAJ: [0.55, 0.50]
-    Tractive: [0.40, 0.70]
-    Weenect: [0.45, 0.65]
-    AirTag: [0.95, 0.95]
-    Invoxia: [0.80, 0.75]
-    Hausnotruf: [0.70, 0.40]
-    Webfleet: [0.90, 0.10]
-    Vimcar: [0.90, 0.15]
-```
-→ PAJ is mid-pack. Battery/size gap vs AirTag and Invoxia.
-
-### Map 3 — Portfolio breadth vs business depth
-```mermaid
-quadrantChart
-    x-axis Single segment --> Multi-segment
-    y-axis Consumer only --> Fleet grade
-    quadrant-1 Platform
-    quadrant-2 B2B specialist
-    quadrant-3 Niche consumer
-    quadrant-4 Broad consumer
-    PAJ: [0.85, 0.50]
-    Tractive: [0.15, 0.05]
-    Weenect: [0.45, 0.10]
-    AirTag: [0.70, 0.05]
-    Invoxia: [0.50, 0.25]
-    Hausnotruf: [0.10, 0.20]
-    Webfleet: [0.30, 0.95]
-    Vimcar: [0.25, 0.75]
-```
-→ PAJ alone near "platform." Moat for cross-sell.
-
-### Map 4 — Ease of use vs safety features
-```mermaid
-quadrantChart
-    x-axis Complex --> Simple
-    y-axis Few alarms --> Rich safety
-    quadrant-1 Safe and simple
-    quadrant-2 Powerful, complex
-    quadrant-3 Limited
-    quadrant-4 Simple, basic
-    PAJ: [0.60, 0.80]
-    Tractive: [0.80, 0.60]
-    Weenect: [0.70, 0.65]
-    AirTag: [0.95, 0.15]
-    Invoxia: [0.65, 0.40]
-    Hausnotruf: [0.85, 0.85]
-    Webfleet: [0.30, 0.70]
-    Vimcar: [0.60, 0.40]
-```
-→ Rich safety features. Simplicity is the gap vs Hausnotruf/Tractive.
-
----
+## Scores
+| | Afford | Live | Ease | Safety | Plug | Depth | Breadth | Flex |
+|---|---|---|---|---|---|---|---|---|
+| **PAJ** | 7.5 | 8 | 6 | 8 | 9 | 5 | 9 | 8.5 |
+| Tractive | 5 | 9 | 8 | 6 | – | – | 3 | 7 |
+| Weenect | 5.5 | 8 | 7 | 6.5 | – | – | 6 | 7 |
+| AirTag | 9.5 | 2 | 9 | 1.5 | 9.5 | 1 | 7 | 9.5 |
+| Invoxia | 4.5 | 5 | 6.5 | 4 | 8 | 3 | 6.5 | 6 |
+| Hausnotruf | 3 | 3 | 8.5 | 9 | – | – | 2 | 6 |
+| Webfleet | 2 | 9 | 4 | 7 | 3 | 9.5 | 3 | 2 |
+| Samsara | 1 | 9.5 | 4 | 8 | 3.5 | 10 | 4 | 2 |
+| Vimcar | 4.5 | 7 | 7 | 4 | 7 | 7 | 2 | 5 |
 
 ## Claims and proof
 | Claim | Proof | Strength |
 |---|---|---|
-| Real-time 4G tracking, anywhere | Cellular + GPS, FINDER app/portal | strong |
-| One app for pets, people, vehicles | FINDER portal, full device range | strong |
-| Affordable | Subscriptions from ~€5–7/mo (verify) · cheaper than Tractive per techtest.org | medium |
-| Made for Europe, GDPR | German company, Windeck, since 2011 | medium |
-| Safety alarms | SOS, geofence, speed, vibration alarms | strong |
-| Long battery | Up to ~5 days (PET Finder, manufacturer data) | thin |
+| Real-time 4G, anywhere | 4G + GPS, live in FINDER app | strong |
+| One app for pets, people, vehicles | FINDER app/portal, full range | strong |
+| Fair price | From ~€4–5/mo (retailer data, verify) · below Tractive | medium |
+| Safety alarms | SOS, geofence, movement, vibration, speed alarms | strong |
+| Fleet history | Route history up to 100 days (VEHICLE Finder 2.0) | medium |
+| Easy install | Magnetic (POWER Finder) or 12V | medium |
+| Battery | PET up to 5 days · EASY ~7 days (manufacturer / retailer) | thin |
+| German, GDPR | PAJ UG, Windeck, since 2011 | medium |

@@ -1,0 +1,78 @@
+/* PAJ GPS brand: orange #f05123, black, white (PAJ affiliate brand guide). */
+:root {
+  --orange: #f05123;
+  --orange-tint: #fde8e0;
+  --black: #111111;
+  --ink: #111111;
+  --ink-2: #4a4a4a;
+  --ink-3: #8a8a8a;
+  --line: #e4e4e4;
+  --paper: #ffffff;
+  --panel: #f6f6f6;
+}
+@page { size: A4 landscape; margin: 0; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: var(--paper); }
+body {
+  font-family: "Inter", "Liberation Sans", sans-serif;
+  color: var(--ink);
+  font-size: 10.5pt;
+  line-height: 1.35;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+.page {
+  width: 297mm; height: 210mm;
+  position: relative; overflow: hidden;
+  page-break-after: always;
+  display: flex; flex-direction: column;
+}
+.page:last-child { page-break-after: auto; }
+
+/* Header / footer */
+.bar {
+  background: var(--black); color: #fff;
+  height: 14mm; padding: 0 12mm;
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1.2mm solid var(--orange);
+  flex: none;
+}
+.logo { font-weight: 800; font-size: 15pt; letter-spacing: -0.02em; }
+.logo b { color: var(--orange); font-weight: 800; }
+.bar .doc { font-size: 8.5pt; letter-spacing: 0.12em; text-transform: uppercase; color: #cfcfcf; }
+.foot {
+  flex: none; height: 9mm; padding: 0 12mm;
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 7.5pt; color: var(--ink-3); border-top: 0.3mm solid var(--line);
+}
+.body { flex: 1; padding: 8mm 12mm 6mm; display: flex; flex-direction: column; min-height: 0; }
+
+/* Type */
+.kicker { font-size: 8pt; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--orange); }
+h1 { font-family: "Inter Display", "Inter", sans-serif; font-size: 26pt; font-weight: 800; letter-spacing: -0.02em; line-height: 1.05; }
+h2 { font-size: 9pt; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink); margin-bottom: 1.5mm; }
+.quote { font-size: 12.5pt; font-weight: 500; color: var(--ink-2); margin-top: 1.5mm; }
+.quote::before { content: "\201C"; color: var(--orange); font-weight: 800; }
+.quote::after { content: "\201D"; color: var(--orange); font-weight: 800; }
+.muted { color: var(--ink-3); }
+.verify { color: var(--ink-3); font-size: 7.5pt; }
+
+/* Building blocks */
+.grid { display: grid; gap: 4mm; }
+.card { border-top: 0.6mm solid var(--black); padding-top: 2mm; }
+.card.accent { border-top-color: var(--orange); }
+ul.dash { list-style: none; }
+ul.dash li { padding-left: 3.5mm; position: relative; margin-bottom: 0.8mm; }
+ul.dash li::before { content: ""; position: absolute; left: 0; top: 0.62em; width: 1.6mm; height: 0.5mm; background: var(--orange); }
+ol.rank { padding-left: 4.5mm; } ol.rank li { margin-bottom: 0.6mm; } ol.rank li::marker { color: var(--orange); font-weight: 700; }
+.pill { display: inline-block; font-size: 7.5pt; font-weight: 700; padding: 0.6mm 2mm; border-radius: 1mm; background: var(--panel); color: var(--ink); }
+.pill.hi { background: var(--orange); color: var(--black); }
+.pill.dark { background: var(--black); color: #fff; }
+
+table.t { width: 100%; border-collapse: collapse; font-size: 9.5pt; }
+table.t th { text-align: left; font-size: 7.5pt; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); font-weight: 700; padding: 1.4mm 2mm; border-bottom: 0.5mm solid var(--black); }
+table.t td { padding: 1.6mm 2mm; border-bottom: 0.3mm solid var(--line); vertical-align: top; }
+table.t tr.us td { background: var(--orange-tint); font-weight: 600; }
+
+.stat { font-family: "Inter Display", "Inter", sans-serif; font-size: 22pt; font-weight: 800; line-height: 1; }
+.stat small { display: block; font-family: "Inter", sans-serif; font-size: 7.5pt; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); margin-top: 1mm; }

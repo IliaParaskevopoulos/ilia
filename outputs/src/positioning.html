@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>PAJ GPS · Positioning</title>
+<link rel="stylesheet" href="brand.css">
+<script src="data.js"></script><script src="chart.js"></script>
+<style>
+  .split { display: grid; grid-template-columns: 158mm 1fr; gap: 10mm; flex: 1; min-height: 0; }
+  .split .chart { display: flex; align-items: center; }
+  .split .chart svg { height: 158mm; width: 158mm; }
+  .panel { display: flex; flex-direction: column; gap: 5mm; padding-top: 2mm; }
+  .panel h1 { font-size: 22pt; }
+  .criteria { font-size: 9pt; }
+  .criteria b { color: var(--ink); }
+  .action { background: var(--black); color: #fff; padding: 3mm 4mm; border-left: 1.2mm solid var(--orange); font-weight: 600; }
+  .action .kicker { display: block; margin-bottom: 1mm; }
+  .over { display: grid; grid-template-columns: 1fr 1fr 95mm; gap: 6mm; flex: 1; min-height: 0; }
+  .mini h2 { margin-bottom: 0.5mm; } .mini svg { width: 70mm; height: 70mm; }
+  .minis { grid-column: 1 / 3; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: auto auto; gap: 2mm 6mm; }
+  .esum ul.dash li { font-size: 10.5pt; margin-bottom: 2.4mm; }
+</style></head><body>
+<div id="doc"></div>
+<script>
+const MAPS = [
+  { icp: 'ICP 1 · Pets', title: 'Live tracking at a fair price', x: 'afford', y: 'live',
+    players: ['PAJ', 'Tractive', 'Weenect', 'Apple AirTag', 'Invoxia'],
+    quads: ['Value live', 'Premium live', 'Weak', 'Cheap, blind'],
+    why: ['#1 Live location, any distance', '#5 Monthly cost'],
+    take: ['PAJ owns "value live" alone.', 'Tractive: more live, pricier.', 'AirTag: cheapest, but blind away from phones.'],
+    act: 'Lead with live + fair price. Landmine: "no iPhone nearby?"' },
+  { icp: 'ICP 2 · Seniors', title: 'Safety without complexity', x: 'ease', y: 'safety',
+    players: ['PAJ', 'Hausnotruf', 'Weenect', 'Apple AirTag'],
+    quads: ['Safe and simple', 'Safe, complex', 'Weak', 'Simple, unsafe'],
+    why: ['#1 Will wear it · #3 Zero setup', '#2 One-press SOS · #4 Geofence'],
+    take: ['Hausnotruf leads, but only at home.', 'PAJ strong on safety; ease is the gap.', 'AirTag is not a safety device.'],
+    act: 'Simplify onboarding. Sell as Hausnotruf’s outdoor complement.' },
+  { icp: 'ICP 3 · Fleet', title: 'Easy start, enough depth', x: 'plug', y: 'depth',
+    players: ['PAJ', 'Webfleet', 'Samsara', 'Vimcar', 'Invoxia', 'Apple AirTag'],
+    quads: ['Easy and deep', 'Deep, heavy', 'Weak', 'Easy, shallow'],
+    why: ['#2 Plug & play install', '#5 Route history, logbook'],
+    take: ['PAJ: easiest real fleet option.', 'Webfleet / Samsara: deep, heavy, costly.', 'Vimcar is the real fight.'],
+    act: 'Add logbook depth. Target 3–50 vehicles, mixed assets.' },
+  { icp: 'All ICPs · Goal 2', title: 'One account, every tracker', x: 'breadth', y: 'flex',
+    players: ['PAJ', 'Tractive', 'Weenect', 'Apple AirTag', 'Invoxia', 'Hausnotruf', 'Webfleet', 'Samsara', 'Vimcar'],
+    quads: ['Platform', 'Flexible niche', 'Locked niche', 'Broad, locked'],
+    why: ['Goal 2: devices per customer', 'Goal 2: renewals, churn'],
+    take: ['PAJ: broadest live range, no lock-in.', 'Only AirTag rivals it, and it isn’t live.', 'Fleet rivals lock in; pet rivals stay narrow.'],
+    act: 'Multi-device bundles. One login, one bill.' },
+];
+const N = MAPS.length + 1;
+const bar = (n) => `<div class="bar"><div class="logo">PAJ <b>GPS</b></div><div class="doc">Positioning · ${n} / ${N}</div></div>`;
+const foot = `<div class="foot"><span>Scores 0–10, directional estimates from competitor research (verify) · Axes = ICP buying criteria</span><span>Internal · Q4 2026</span></div>`;
+const li = (a) => `<ul class="dash">${a.map(x => `<li>${x}</li>`).join('')}</ul>`;
+let h = '';
+
+// Overview: four maps + executive summary beside them
+h += `<section class="page">${bar(1)}<div class="body">
+  <div class="kicker">Positioning · overview</div><h1 style="font-size:20pt;margin-bottom:2mm">Four maps, eight buying criteria</h1>
+  <div class="over">
+    <div class="minis">${MAPS.map((m, i) => `<div class="mini"><h2>${m.icp}</h2>${perceptualMap({ players: m.players, x: m.x, y: m.y, size: 300, mini: true })}</div>`).join('')}</div>
+    <div class="esum"><div class="card accent"><h2>Executive summary</h2>${li([
+      '<b>Pets:</b> only live tracker at a fair price.',
+      '<b>Seniors:</b> safety leader outside the home; simplify.',
+      '<b>Fleet:</b> easiest start; deepen logbook vs Vimcar.',
+      '<b>Across ICPs:</b> broadest range, no lock-in. Our moat for goal 2.',
+      '<b>Positioning:</b> one app, every tracker, honest price.'])}</div>
+      <div class="action" style="margin-top:4mm"><span class="kicker">Upper-right = better for the customer</span>Orange zone = where we want to be.</div></div>
+  </div></div>${foot}</section>`;
+
+// One page per map, summary beside the chart
+MAPS.forEach((m, i) => {
+  h += `<section class="page">${bar(i + 2)}<div class="body"><div class="split">
+    <div class="chart">${perceptualMap({ players: m.players, x: m.x, y: m.y, size: 600, quads: m.quads })}</div>
+    <div class="panel">
+      <div><div class="kicker">Map ${i + 1} · ${m.icp}</div><h1>${m.title}</h1></div>
+      <div class="card"><h2>Axes from ICP criteria</h2><div class="criteria">${li([`<b>X · ${VARS[m.x]}:</b> ${m.why[0]}`, `<b>Y · ${VARS[m.y]}:</b> ${m.why[1]}`])}</div></div>
+      <div class="card accent"><h2>Executive summary</h2>${li(m.take)}</div>
+      <div class="action"><span class="kicker">Action</span>${m.act}</div>
+    </div></div></div>${foot}</section>`;
+});
+document.getElementById('doc').innerHTML = h;
+</script>
+</body></html>

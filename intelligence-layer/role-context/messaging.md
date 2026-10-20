@@ -1,49 +1,52 @@
 # Messaging House
 
-_Updated: 2026-10-20_
+_Updated: 2026-10-20 · Rendered: `outputs/PAJ_messaging.pdf`_
 
 ## Method
 | Layer | Holds | Rule |
 |---|---|---|
-| **Roof** | Umbrella message | 1 line. Customer outcome, not features. |
-| **Pillars** | 3 key messages | Each maps to a top ICP pain. Mutually exclusive. |
-| **Proof** | Reasons to believe, per pillar | Facts only, from positioning.md. No proof → drop the pillar. |
-| **Foundation** | Brand tone + values | Constant across segments. |
+| **Roof** | Core message | 1 line. Outcome, not feature. |
+| **Pillars** | 3 messages | Each answers a top ICP pain. No overlap. |
+| **Proof** | 2–3 per pillar | Only claims in positioning.md. No proof → drop pillar. |
+| **Foundation** | Brand values | Same for every ICP. |
 
-**Run:**
-1. Pull pains from `icp.md` and claims from `positioning.md`.
-2. Write the roof, then 3 pillars per segment, then 2–3 proofs per pillar.
-3. Check:
-   - [ ] Roof passes "so what?" for every ICP
-   - [ ] Every pillar answers a listed pain
-   - [ ] Every proof is in positioning.md
-   - [ ] No pillar a competitor could say identically
-   - [ ] ≤ 12 words per line
+**Run:** pains from `icp.md` → claims from `positioning.md` → roof → pillars → proof → check:
+- [ ] Roof passes "so what?" for the ICP
+- [ ] Each pillar answers a listed pain
+- [ ] Each proof is in positioning.md
+- [ ] No pillar a rival could say identically
+- [ ] ≤ 12 words per line
+
+**Foundation (all):** Reliable · Simple · Caring · German, GDPR-safe
 
 ---
 
-## Brand house
-```
-                  ┌────────────────────────────────────────┐
-     ROOF         │ Know where what matters is. Right now. │
-                  └────────────────────────────────────────┘
-               ┌──────────────┬──────────────┬──────────────┐
-     PILLARS   │  Real-time   │ One app for  │  Fair price  │
-               │  anywhere    │  everything  │  no lock-in  │
-               ├──────────────┼──────────────┼──────────────┤
-     PROOF     │ 4G + GPS     │ Pets, people,│ From ~€5/mo  │
-               │ Live alarms  │ vehicles in  │ No contract  │
-               │ SOS, geofence│ FINDER app   │ (verify)     │
-               └──────────────┴──────────────┴──────────────┘
-     FOUNDATION   Reliable · Simple · Caring · German, GDPR-safe
-```
+## ICP 1 · Pets — PET Finder 4G
+**Roof:** Find your dog in minutes, not hours.
+| Pillar | Message | Proof |
+|---|---|---|
+| Live, anywhere | 4G live location, wherever your dog runs. | 4G + GPS · no phones nearby needed |
+| Escape alert | Know the moment they leave the garden. | Geofence · push + email · route history |
+| Built for outdoors | Light, waterproof, ready for every walk. | Waterproof · up to 5 days battery |
 
-## By segment
-| | Pets | Seniors | Fleet |
-|---|---|---|---|
-| **Roof** | Find your dog in minutes, not hours. | Their independence. Your peace of mind. | Every vehicle, every euro, in view. |
-| **Pillar 1** | Live location, any distance | SOS in one press | Theft alarm + recovery |
-| **Pillar 2** | Escape alert via geofence | Wandering alert via geofence | Trip history, logbook |
-| **Pillar 3** | Waterproof, light, rugged | Easy to wear, nothing to learn | No contract, fits any fleet size |
-| **Proof** | 4G GPS · geofence · waterproof (PET Finder) | SOS button · geofence · 4G | Speed, movement alarms · route history · magnetic/OBD devices |
-| **vs** | AirTag: real-time, not "nearby" | Hausnotruf: works outside home | Webfleet: fraction of the price |
+vs Tractive: same live, lower price · vs AirTag: live, not "last seen nearby".
+
+## ICP 2 · Seniors — EASY Finder 4G
+**Roof:** Their independence. Your peace of mind.
+| Pillar | Message | Proof |
+|---|---|---|
+| Help in one press | One button. You're alerted at once. | SOS · alert + live location to family |
+| Wandering alert | Know if they leave safe areas. | Geofence · live map, history |
+| Nothing to learn | Small, wearable, no smartphone needed. | Keyring size · ~7 days battery, IP65 |
+
+vs Hausnotruf: works outside the home · vs Weenect: one app for parent, pet, car.
+
+## ICP 3 · Fleet — POWER / VEHICLE Finder 4G
+**Roof:** Every vehicle, every machine, in view.
+| Pillar | Message | Proof |
+|---|---|---|
+| Stop theft | Instant alarm. Live recovery. | Movement + vibration alarms · live 4G · hidden magnetic |
+| Run the fleet | Routes and trips in one portal. | 100-day route history · one FINDER portal |
+| No lock-in | Start with three. Install in minutes. | No long contract (verify) · magnetic or 12V |
+
+vs Webfleet: fraction of the price · vs Vimcar: tracks trailers and machines too.

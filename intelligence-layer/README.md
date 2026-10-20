@@ -8,6 +8,21 @@ The context everything else reads from. Role context: this company, this quarter
 - One line per point. No filler, no preamble, no recap.
 - Numbers over adjectives. Mark unverified data `(verify)`.
 
+## Brand rule
+Every output carries PAJ GPS branding (source: PAJ affiliate brand guide).
+- Orange `#f05123` · black `#111111` · white. Logo on black.
+- Font: Inter. A4 landscape. Black header bar, orange rule.
+- Shared styles: [`outputs/src/brand.css`](../outputs/src/brand.css).
+
+## Outputs
+Rendered PDFs in [`outputs/`](../outputs/). Rebuild: `node outputs/src/render.js`.
+| PDF | From |
+|---|---|
+| `PAJ_icp.pdf` | icp.md · one page per ICP |
+| `PAJ_competitors.pdf` | competitors.md · summary, one page per competitor, battle card |
+| `PAJ_positioning.pdf` | positioning.md · 4 maps + summary |
+| `PAJ_messaging.pdf` | messaging.md · one house per ICP |
+
 ## Files
 | File | Holds |
 |---|---|

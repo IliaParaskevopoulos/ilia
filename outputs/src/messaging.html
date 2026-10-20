@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>PAJ GPS · Messaging houses</title>
+<link rel="stylesheet" href="brand.css">
+<style>
+  .wrap { display: grid; grid-template-columns: 1fr 66mm; gap: 8mm; flex: 1; min-height: 0; }
+  .house { display: flex; flex-direction: column; }
+  .roof { background: var(--black); color: #fff; clip-path: polygon(50% 0, 100% 100%, 0 100%);
+    height: 40mm; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 4mm; text-align: center; }
+  .roof .msg { font-family: "Inter Display", "Inter", sans-serif; font-size: 17pt; font-weight: 800; letter-spacing: -0.01em; max-width: 120mm; line-height: 1.1; }
+  .eave { height: 1.6mm; background: var(--orange); }
+  .label { font-size: 7pt; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); }
+  .pillars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3mm; padding: 3mm 6mm; flex: 1; }
+  .pillar { border: 0.4mm solid var(--line); border-top: 1.2mm solid var(--orange); padding: 3mm; display: flex; flex-direction: column; gap: 2mm; }
+  .pillar h3 { font-size: 13pt; font-weight: 800; letter-spacing: -0.01em; }
+  .pillar .m { font-size: 10pt; color: var(--ink-2); font-weight: 500; min-height: 2.7em; }
+  .pillar .proof { flex: 1; background: var(--panel); padding: 2.5mm 3mm; }
+  .found { background: var(--black); color: #fff; padding: 2.5mm 4mm; display: flex; justify-content: space-between; align-items: center; }
+  .found .v { font-weight: 700; letter-spacing: 0.04em; }
+  .found .v b { color: var(--orange); margin: 0 1.5mm; }
+  .side { display: flex; flex-direction: column; gap: 4mm; }
+  ul.check { list-style: none; font-size: 8.5pt; } ul.check li { margin-bottom: 1mm; }
+  ul.check li::before { content: "\2713"; color: var(--orange); font-weight: 800; margin-right: 1.5mm; }
+</style></head><body>
+<div id="doc"></div>
+<script>
+const H = [
+  { icp: 'ICP 1 · Pets', who: 'The protective dog owner', product: 'PET Finder 4G',
+    roof: 'Find your dog in minutes, not hours.',
+    pillars: [
+      { t: 'Live, anywhere', m: '4G live location, wherever your dog runs.', p: ['4G + GPS, live in FINDER app', 'No phones nearby needed'] },
+      { t: 'Escape alert', m: 'Know the moment they leave the garden.', p: ['Geofence alarm', 'Push + email alerts', 'Route history'] },
+      { t: 'Built for outdoors', m: 'Light, waterproof, ready for every walk.', p: ['Waterproof (manufacturer)', 'Up to 5 days battery'] } ],
+    vs: [['Tractive', 'Same live tracking, lower price.'], ['AirTag', 'Live, not "last seen nearby".']] },
+  { icp: 'ICP 2 · Seniors', who: 'The caring adult child', product: 'EASY Finder 4G',
+    roof: 'Their independence. Your peace of mind.',
+    pillars: [
+      { t: 'Help in one press', m: 'One button. You’re alerted at once.', p: ['SOS button', 'Alert + live location to family'] },
+      { t: 'Wandering alert', m: 'Know if they leave safe areas.', p: ['Geofence alarm', 'Live map, history'] },
+      { t: 'Nothing to learn', m: 'Small, wearable, no smartphone needed.', p: ['Pocket / keyring size', '~7 days battery, IP65 (retailer)'] } ],
+    vs: [['Hausnotruf', 'Works outside the home too.'], ['Weenect', 'One app for parent, pet and car.']] },
+  { icp: 'ICP 3 · Fleet', who: 'The hands-on fleet owner', product: 'POWER / VEHICLE Finder 4G',
+    roof: 'Every vehicle, every machine, in view.',
+    pillars: [
+      { t: 'Stop theft', m: 'Instant alarm. Live recovery.', p: ['Movement + vibration alarms', 'Live 4G tracking', 'Magnetic, hidden install'] },
+      { t: 'Run the fleet', m: 'Routes and trips in one portal.', p: ['Route history up to 100 days', 'All devices in one FINDER portal'] },
+      { t: 'No lock-in', m: 'Start with three. Install in minutes.', p: ['No long contract (verify)', 'Magnetic or 12V, no installer'] } ],
+    vs: [['Webfleet', 'Fraction of the price, no lock-in.'], ['Vimcar', 'Tracks trailers and machines too.']] },
+];
+const checks = ['Roof passes "so what?"', 'Each pillar answers an ICP pain', 'Each proof in positioning.md', 'No pillar a rival could copy', '≤ 12 words per line'];
+const li = (a) => `<ul class="dash">${a.map(x => `<li>${x}</li>`).join('')}</ul>`;
+document.getElementById('doc').innerHTML = H.map((x, i) => `<section class="page">
+  <div class="bar"><div class="logo">PAJ <b>GPS</b></div><div class="doc">Messaging house · ${i + 1} / ${H.length}</div></div>
+  <div class="body">
+    <div style="margin-bottom:4mm"><div class="kicker">${x.icp} · ${x.product}</div><h1 style="font-size:20pt">${x.who}</h1></div>
+    <div class="wrap">
+      <div class="house">
+        <div class="roof"><div><div class="label" style="color:var(--orange);margin-bottom:1.5mm">Roof · core message</div><div class="msg">${x.roof}</div></div></div>
+        <div class="eave"></div>
+        <div class="pillars">${x.pillars.map((p, j) => `<div class="pillar">
+          <div class="label">Pillar ${j + 1}</div><h3>${p.t}</h3><div class="m">${p.m}</div>
+          <div class="proof"><div class="label" style="margin-bottom:1mm">Proof</div>${li(p.p)}</div></div>`).join('')}</div>
+        <div class="found"><span class="label" style="color:#cfcfcf">Foundation</span>
+          <span class="v">Reliable<b>·</b>Simple<b>·</b>Caring<b>·</b>German, GDPR-safe</span></div>
+      </div>
+      <div class="side">
+        <div class="card accent"><h2>Versus</h2><table class="t"><tbody>${x.vs.map(v => `<tr><td><b>${v[0]}</b></td><td>${v[1]}</td></tr>`).join('')}</tbody></table></div>
+        <div class="card"><h2>Tone</h2>${li(['Calm, direct', 'Outcome first', 'No tech jargon'])}</div>
+        <div class="card"><h2>House check</h2><ul class="check">${checks.map(c => `<li>${c}</li>`).join('')}</ul></div>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span>Method: roof → 3 pillars → proof → foundation · source: icp.md, positioning.md</span><span>Internal · Q4 2026</span></div>
+</section>`).join('');
+</script>
+</body></html>
