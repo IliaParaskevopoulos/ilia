@@ -22,6 +22,9 @@ Rendered PDFs in [`outputs/`](../outputs/). Rebuild: `node outputs/src/render.js
 | `PAJ_competitors.pdf` | competitors.md · summary, one page per competitor, battle card |
 | `PAJ_positioning.pdf` | positioning.md · 4 maps + summary |
 | `PAJ_messaging.pdf` | messaging.md · one house per ICP |
+| `PAJ_sales-allround.pdf` | ALLROUND Finder 2.0 manual · 3-page sales brochure |
+
+Website version (Lovable): [`lovable/`](../lovable/).
 
 ## Files
 | File | Holds |

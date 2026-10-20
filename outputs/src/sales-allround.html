@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>PAJ GPS · ALLROUND Finder</title>
+<link rel="stylesheet" href="brand.css">
+<style>
+  @page { size: A4 portrait; margin: 0; }
+  .page { width: 210mm; height: 297mm; }
+  .ink { color: var(--ink-2); }
+  /* Cover */
+  .hero { background: var(--black); color: #fff; height: 196mm; position: relative; overflow: hidden; padding: 14mm 14mm 0; }
+  .hero .map { position: absolute; inset: 0; opacity: 1; }
+  .hero .top { position: relative; display: flex; justify-content: space-between; align-items: center; }
+  .hero .tag { font-size: 8pt; letter-spacing: 0.16em; text-transform: uppercase; color: #bdbdbd; }
+  .hero h1 { position: relative; font-size: 44pt; line-height: 0.98; letter-spacing: -0.035em; margin-top: 16mm; max-width: 150mm; }
+  .hero h1 em { font-style: normal; color: var(--orange); }
+  .hero .sub { position: relative; font-size: 13pt; color: #d6d6d6; margin-top: 5mm; max-width: 110mm; }
+  .hero .device { position: absolute; right: -6mm; bottom: -4mm; width: 150mm; }
+  .prod { position: relative; margin-top: 8mm; display: inline-block; border: 0.4mm solid #444; padding: 1.5mm 3mm; font-size: 8.5pt; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; }
+  .prod b { color: var(--orange); }
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); padding: 0 14mm; margin-top: -1px; }
+  .stats > div { padding: 9mm 0 0; border-top: 1.4mm solid var(--orange); margin-right: 4mm; }
+  .stats .n { font-family: "Inter Display", "Inter", sans-serif; font-size: 34pt; font-weight: 800; letter-spacing: -0.03em; line-height: 1; }
+  .stats .n small { font-size: 14pt; font-weight: 700; margin-left: 0.5mm; }
+  .stats .l { font-size: 9pt; color: var(--ink-2); margin-top: 2mm; }
+  .trust { margin: 12mm 14mm 0; padding: 5mm 0; border-top: 0.3mm solid var(--line); border-bottom: 0.3mm solid var(--line); display: grid; grid-template-columns: repeat(4, 1fr); font-size: 9.5pt; color: var(--ink-2); }
+  .trust b { color: var(--ink); }
+  .vs { margin-top: 9mm; display: grid; grid-template-columns: 1fr 1fr; border: 0.4mm solid var(--black); }
+  .vs > div { padding: 4mm 5mm; }
+  .vs .us { background: var(--orange-tint); }
+  .vs h3 { font-size: 11pt; font-weight: 800; margin-bottom: 1.5mm; }
+  .cover-foot { position: absolute; bottom: 12mm; left: 14mm; right: 14mm; display: flex; justify-content: space-between; align-items: flex-end; font-size: 9pt; }
+  .cover-foot .logo { font-size: 20pt; color: var(--ink); }
+  /* Inner pages */
+  .inner { padding: 14mm; display: flex; flex-direction: column; height: 100%; }
+  .head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10mm; }
+  .head .logo { color: var(--ink); font-size: 13pt; }
+  .head .pg { font-size: 8pt; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); }
+  h2.big { font-family: "Inter Display", "Inter", sans-serif; font-size: 28pt; font-weight: 800; letter-spacing: -0.03em; line-height: 1.02; text-transform: none; margin-bottom: 3mm; }
+  h2.big em { font-style: normal; color: var(--orange); }
+  .lead { font-size: 12pt; color: var(--ink-2); max-width: 150mm; margin-bottom: 8mm; }
+  .uses { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border-top: 0.4mm solid var(--black); }
+  .use { padding: 5mm 4mm 5mm 0; border-bottom: 0.3mm solid var(--line); }
+  .use svg { width: 13mm; height: 13mm; stroke: var(--black); fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+  .use svg .o { stroke: var(--orange); }
+  .use h3 { font-size: 12pt; font-weight: 800; margin-top: 2.5mm; }
+  .use p { font-size: 9.5pt; color: var(--ink-2); margin-top: 0.8mm; }
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5mm; margin-top: 12mm; }
+  .step { background: var(--panel); padding: 5mm; position: relative; }
+  .step .num { font-family: "Inter Display", sans-serif; font-size: 30pt; font-weight: 800; color: var(--orange); line-height: 1; }
+  .step h3 { font-size: 12pt; font-weight: 800; margin-top: 2mm; }
+  .step p { font-size: 9.5pt; color: var(--ink-2); margin-top: 1mm; }
+  .step .url { font-size: 8.5pt; font-weight: 700; margin-top: 2mm; color: var(--ink); }
+  .app { margin-top: 12mm; display: grid; grid-template-columns: 62mm 1fr; gap: 8mm; align-items: center; }
+  .chips { display: flex; flex-wrap: wrap; gap: 2.5mm; }
+  .chip { border: 0.4mm solid var(--black); border-radius: 10mm; padding: 1.8mm 4mm; font-size: 10pt; font-weight: 600; }
+  .chip.hi { background: var(--orange); border-color: var(--orange); }
+  .why { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5mm; margin-bottom: 10mm; }
+  .why > div { border-top: 1.2mm solid var(--orange); padding-top: 3mm; }
+  .why h3 { font-size: 13pt; font-weight: 800; }
+  .why p { font-size: 9.5pt; color: var(--ink-2); margin-top: 1mm; }
+  .specs { display: grid; grid-template-columns: 1.4fr 1fr; gap: 10mm; }
+  table.spec { width: 100%; border-collapse: collapse; font-size: 9.5pt; }
+  table.spec td { padding: 2mm 0; border-bottom: 0.3mm solid var(--line); }
+  table.spec td:first-child { color: var(--ink-3); width: 40%; }
+  table.spec td:last-child { font-weight: 600; }
+  .box li { font-size: 10pt; margin-bottom: 2mm; }
+  .cta { margin-top: auto; background: var(--black); color: #fff; padding: 9mm 10mm; display: grid; grid-template-columns: 1fr 30mm; gap: 8mm; align-items: center; }
+  .cta h2 { font-family: "Inter Display", sans-serif; font-size: 24pt; font-weight: 800; letter-spacing: -0.02em; text-transform: none; color: #fff; line-height: 1.05; }
+  .cta h2 em { font-style: normal; color: var(--orange); }
+  .cta p { color: #cfcfcf; margin-top: 2mm; }
+  .cta .qr { background: #fff; padding: 2.5mm; width: 30mm; height: 30mm; }
+  .fine { font-size: 7pt; color: var(--ink-3); margin-top: 3mm; }
+</style></head><body>
+
+<!-- Device illustration, reused -->
+<svg width="0" height="0" style="position:absolute"><defs>
+  <linearGradient id="body" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3a3a3a"/><stop offset="1" stop-color="#161616"/></linearGradient>
+  <radialGradient id="glow"><stop offset="0" stop-color="#f05123" stop-opacity=".55"/><stop offset="1" stop-color="#f05123" stop-opacity="0"/></radialGradient>
+  <symbol id="device" viewBox="0 0 420 300">
+    <ellipse cx="210" cy="160" rx="200" ry="140" fill="url(#glow)"/>
+    <g transform="rotate(-12 210 150)">
+      <rect x="85" y="70" width="250" height="150" rx="34" fill="url(#body)" stroke="#555" stroke-width="2"/>
+      <rect x="97" y="82" width="226" height="126" rx="26" fill="none" stroke="#2c2c2c" stroke-width="2"/>
+      <circle cx="280" cy="145" r="24" fill="#f05123"/><text x="280" y="151" text-anchor="middle" font-family="Inter" font-weight="800" font-size="15" fill="#111">SOS</text>
+      <circle cx="122" cy="104" r="5" fill="#f05123"/><circle cx="140" cy="104" r="5" fill="#3d8bff"/><circle cx="158" cy="104" r="5" fill="#e23b3b"/>
+      <text x="122" y="190" font-family="Inter" font-weight="800" font-size="22" fill="#e9e9e9">PAJ <tspan fill="#f05123">GPS</tspan></text>
+      <rect x="330" y="125" width="10" height="40" rx="4" fill="#2a2a2a"/>
+    </g>
+  </symbol>
+</defs></svg>
+
+<!-- PAGE 1 · COVER -->
+<section class="page">
+  <div class="hero">
+    <svg class="map" viewBox="0 0 210 196" preserveAspectRatio="xMidYMid slice">
+      <g stroke="#262626" stroke-width="0.5" fill="none">
+        <path d="M-5 150 C 40 140, 70 165, 120 120 S 190 90, 220 70"/><path d="M30 -5 C 45 60, 25 110, 60 200"/>
+        <path d="M-5 60 L 220 95"/><path d="M140 -5 C 130 50, 170 120, 150 200"/><path d="M-5 110 C 60 100, 110 60, 220 40"/>
+        <path d="M90 -5 L 100 200"/><path d="M-5 180 L 220 160"/><path d="M180 -5 L 205 200"/>
+      </g>
+      <path d="M20 170 C 60 150, 70 120, 105 115 S 150 125, 168 112" stroke="#f05123" stroke-width="1.1" fill="none" stroke-dasharray="2 1.6"/>
+      <circle cx="20" cy="170" r="1.6" fill="#f05123"/>
+    </svg>
+    <div class="top"><div class="logo">PAJ <b>GPS</b></div><div class="tag">German company · Since 2011</div></div>
+    <div class="prod">ALLROUND <b>Finder</b> 2.0</div>
+    <h1>Anything that moves.<br><em>Always in view.</em></h1>
+    <div class="sub">One tracker for vehicles, trailers, machines, luggage and people. Live on your phone. Weeks on one charge.</div>
+    <svg class="device" viewBox="0 0 420 300"><use href="#device"/></svg>
+  </div>
+  <div class="stats">
+    <div><div class="n">20<small>days</small></div><div class="l">Battery on one charge</div></div>
+    <div><div class="n">&lt;10<small>m</small></div><div class="l">GPS accuracy</div></div>
+    <div><div class="n">60<small>days</small></div><div class="l">Standby</div></div>
+    <div><div class="n">5<small>sec</small></div><div class="l">Hold SOS to alert</div></div>
+  </div>
+  <div class="trust">
+    <div><b>Live</b> in the FINDER app</div><div><b>SIM</b> already inside</div><div><b>SOS</b> button built in</div><div><b>IP64</b> splash-proof</div>
+  </div>
+  <div class="cover-foot"><div class="logo">PAJ <b>GPS</b></div><div class="muted">paj-gps.de</div></div>
+</section>
+
+<!-- PAGE 2 · USE CASES + HOW IT WORKS -->
+<section class="page"><div class="inner">
+  <div class="head"><div class="logo">PAJ <b>GPS</b></div><div class="pg">ALLROUND Finder · 2 / 3</div></div>
+  <h2 class="big">Built for what you<br><em>can't afford to lose.</em></h2>
+  <div class="lead">Drop it in, stick it on, forget it. The ALLROUND Finder reports where it is, wherever it goes.</div>
+  <div class="uses">
+    <div class="use"><svg viewBox="0 0 24 24"><path d="M3 16v-3l2-5h11l3 5h2v3"/><circle cx="7" cy="16.5" r="1.8"/><circle cx="17" cy="16.5" r="1.8"/><path d="M9 16.5h6"/><path class="o" d="M7 11h9"/></svg><h3>Vans & cars</h3><p>Theft alarm, live recovery.</p></div>
+    <div class="use"><svg viewBox="0 0 24 24"><rect x="4" y="7" width="13" height="8" rx="1"/><circle cx="9" cy="17" r="1.8"/><path d="M17 13h4"/><path class="o" d="M7 10h7"/></svg><h3>Trailers & machines</h3><p>Know where every asset is.</p></div>
+    <div class="use"><svg viewBox="0 0 24 24"><circle cx="5.5" cy="16" r="3"/><circle cx="18.5" cy="16" r="3"/><path d="M5.5 16l4-6h5l4 6"/><path class="o" d="M14 7h3"/></svg><h3>Motorbikes</h3><p>Hidden. Silent. Always on.</p></div>
+    <div class="use"><svg viewBox="0 0 24 24"><path d="M3 15h18l-3 4H6z"/><path d="M12 4v11"/><path class="o" d="M12 5l6 8h-6"/></svg><h3>Boats & campers</h3><p>Weeks unattended, still tracked.</p></div>
+    <div class="use"><svg viewBox="0 0 24 24"><rect x="5" y="7" width="14" height="12" rx="2"/><path d="M9 7V5h6v2"/><path class="o" d="M9 11v4M15 11v4"/></svg><h3>Luggage & valuables</h3><p>Find bags, tools, deliveries.</p></div>
+    <div class="use"><svg viewBox="0 0 24 24"><circle cx="10" cy="6" r="2.5"/><path d="M10 9v6l-3 5M10 15l3 5M6 12h8"/><path class="o" d="M17 5a4 4 0 0 1 0 6M19.5 3a7 7 0 0 1 0 10"/></svg><h3>People</h3><p>One SOS press alerts family.</p></div>
+  </div>
+  <div class="steps">
+    <div class="step"><div class="num">1</div><h3>Charge</h3><p>Click on the magnetic cable. Done when the red LED goes off.</p></div>
+    <div class="step"><div class="num">2</div><h3>Activate</h3><p>Register online, switch on. SIM is already inside.</p><div class="url">start.finder-portal.com</div></div>
+    <div class="step"><div class="num">3</div><h3>Track</h3><p>Open the FINDER app or portal. Phone, tablet or PC.</p><div class="url">FINDER app · v2.finder-portal.com</div></div>
+  </div>
+  <div class="app">
+    <div><h2 class="big" style="font-size:20pt">Everything in<br><em>one app.</em></h2></div>
+    <div class="chips"><span class="chip hi">Live position</span><span class="chip">Routes</span><span class="chip">Heat map</span><span class="chip">Route points</span><span class="chip">Alarms & stops</span><span class="chip">Notifications</span><span class="chip">2D / 3D map</span><span class="chip">All devices, one login</span></div>
+  </div>
+</div></section>
+
+<!-- PAGE 3 · WHY + SPECS + CTA -->
+<section class="page"><div class="inner">
+  <div class="head"><div class="logo">PAJ <b>GPS</b></div><div class="pg">ALLROUND Finder · 3 / 3</div></div>
+  <h2 class="big">Small box.<br><em>Serious tracker.</em></h2>
+  <div class="lead">Everything you need is in the box, SIM included.</div>
+  <div class="why">
+    <div><h3>Lasts for weeks</h3><p>5,000 mAh battery. About 20 days in use, 60 on standby.</p></div>
+    <div><h3>Built tough</h3><p>IP64 splash-proof. Works from −20&nbsp;°C to +75&nbsp;°C.</p></div>
+    <div><h3>Ready to go</h3><p>M2M SIM built in. No contracts to sign with a carrier.</p></div>
+  </div>
+  <div class="specs">
+    <div><h2>Technical details</h2><table class="spec"><tbody>
+      <tr><td>Size</td><td>106 × 63 × 23 mm</td></tr>
+      <tr><td>Weight</td><td>166 g</td></tr>
+      <tr><td>Battery</td><td>3.7 V · 5,000 mAh Li-ion</td></tr>
+      <tr><td>Runtime</td><td>~20 days · standby ~60 days</td></tr>
+      <tr><td>GPS accuracy</td><td>&lt; 10 m</td></tr>
+      <tr><td>Network</td><td>GSM quad-band 850/900/1800/1900</td></tr>
+      <tr><td>Start time</td><td>Cold 30 s · running 1 s</td></tr>
+      <tr><td>Protection</td><td>IP64</td></tr>
+      <tr><td>Operating temp.</td><td>−20&nbsp;°C to +75&nbsp;°C</td></tr>
+    </tbody></table></div>
+    <div><h2>In the box</h2><ul class="dash box"><li>ALLROUND Finder</li><li>Magnetic charging cable</li><li>Protective case</li><li>M2M SIM card, pre-installed</li></ul>
+      <h2 style="margin-top:6mm">LEDs at a glance</h2><ul class="dash box"><li><b style="color:var(--orange)">Orange</b> · mobile network</li><li><b style="color:#2f6fd6">Blue</b> · GPS</li><li><b style="color:#d23030">Red</b> · charging</li></ul></div>
+  </div>
+  <div class="vs">
+    <div><h3>Bluetooth tag</h3><ul class="dash"><li>Needs phones nearby</li><li>Last seen, not live</li><li>No SOS, no alarms</li></ul></div>
+    <div class="us"><h3>ALLROUND Finder</h3><ul class="dash"><li>Reports over mobile network</li><li>Live position and routes</li><li>SOS button, alarms, heat map</li></ul></div>
+  </div>
+  <div class="cta">
+    <div><h2>Start tracking<br><em>today.</em></h2><p>Activate in minutes at paj-gps.de</p></div>
+    <div class="qr">
+<svg width="100%" height="100%" version="1.1" viewBox="0 0 25 25" xmlns="http://www.w3.org/2000/svg"><path d="M0,0H1V1H0zM1,0H2V1H1zM2,0H3V1H2zM3,0H4V1H3zM4,0H5V1H4zM5,0H6V1H5zM6,0H7V1H6zM8,0H9V1H8zM11,0H12V1H11zM13,0H14V1H13zM18,0H19V1H18zM19,0H20V1H19zM20,0H21V1H20zM21,0H22V1H21zM22,0H23V1H22zM23,0H24V1H23zM24,0H25V1H24zM0,1H1V2H0zM6,1H7V2H6zM8,1H9V2H8zM10,1H11V2H10zM13,1H14V2H13zM14,1H15V2H14zM16,1H17V2H16zM18,1H19V2H18zM24,1H25V2H24zM0,2H1V3H0zM2,2H3V3H2zM3,2H4V3H3zM4,2H5V3H4zM6,2H7V3H6zM8,2H9V3H8zM11,2H12V3H11zM12,2H13V3H12zM13,2H14V3H13zM18,2H19V3H18zM20,2H21V3H20zM21,2H22V3H21zM22,2H23V3H22zM24,2H25V3H24zM0,3H1V4H0zM2,3H3V4H2zM3,3H4V4H3zM4,3H5V4H4zM6,3H7V4H6zM9,3H10V4H9zM13,3H14V4H13zM16,3H17V4H16zM18,3H19V4H18zM20,3H21V4H20zM21,3H22V4H21zM22,3H23V4H22zM24,3H25V4H24zM0,4H1V5H0zM2,4H3V5H2zM3,4H4V5H3zM4,4H5V5H4zM6,4H7V5H6zM8,4H9V5H8zM9,4H10V5H9zM16,4H17V5H16zM18,4H19V5H18zM20,4H21V5H20zM21,4H22V5H21zM22,4H23V5H22zM24,4H25V5H24zM0,5H1V6H0zM6,5H7V6H6zM9,5H10V6H9zM11,5H12V6H11zM12,5H13V6H12zM13,5H14V6H13zM18,5H19V6H18zM24,5H25V6H24zM0,6H1V7H0zM1,6H2V7H1zM2,6H3V7H2zM3,6H4V7H3zM4,6H5V7H4zM5,6H6V7H5zM6,6H7V7H6zM8,6H9V7H8zM10,6H11V7H10zM12,6H13V7H12zM14,6H15V7H14zM16,6H17V7H16zM18,6H19V7H18zM19,6H20V7H19zM20,6H21V7H20zM21,6H22V7H21zM22,6H23V7H22zM23,6H24V7H23zM24,6H25V7H24zM9,7H10V8H9zM10,7H11V8H10zM11,7H12V8H11zM13,7H14V8H13zM16,7H17V8H16zM0,8H1V9H0zM3,8H4V9H3zM4,8H5V9H4zM5,8H6V9H5zM6,8H7V9H6zM7,8H8V9H7zM8,8H9V9H8zM10,8H11V9H10zM12,8H13V9H12zM16,8H17V9H16zM17,8H18V9H17zM20,8H21V9H20zM22,8H23V9H22zM23,8H24V9H23zM24,8H25V9H24zM0,9H1V10H0zM4,9H5V10H4zM8,9H9V10H8zM12,9H13V10H12zM13,9H14V10H13zM14,9H15V10H14zM15,9H16V10H15zM16,9H17V10H16zM17,9H18V10H17zM19,9H20V10H19zM20,9H21V10H20zM21,9H22V10H21zM22,9H23V10H22zM23,9H24V10H23zM0,10H1V11H0zM1,10H2V11H1zM2,10H3V11H2zM6,10H7V11H6zM7,10H8V11H7zM8,10H9V11H8zM10,10H11V11H10zM12,10H13V11H12zM13,10H14V11H13zM15,10H16V11H15zM18,10H19V11H18zM19,10H20V11H19zM21,10H22V11H21zM24,10H25V11H24zM4,11H5V12H4zM8,11H9V12H8zM9,11H10V12H9zM11,11H12V12H11zM12,11H13V12H12zM15,11H16V12H15zM16,11H17V12H16zM19,11H20V12H19zM21,11H22V12H21zM22,11H23V12H22zM23,11H24V12H23zM24,11H25V12H24zM1,12H2V13H1zM3,12H4V13H3zM6,12H7V13H6zM7,12H8V13H7zM9,12H10V13H9zM16,12H17V13H16zM18,12H19V13H18zM24,12H25V13H24zM0,13H1V14H0zM7,13H8V14H7zM9,13H10V14H9zM10,13H11V14H10zM12,13H13V14H12zM13,13H14V14H13zM14,13H15V14H14zM15,13H16V14H15zM16,13H17V14H16zM17,13H18V14H17zM20,13H21V14H20zM23,13H24V14H23zM0,14H1V15H0zM1,14H2V15H1zM2,14H3V15H2zM3,14H4V15H3zM5,14H6V15H5zM6,14H7V15H6zM8,14H9V15H8zM13,14H14V15H13zM14,14H15V15H14zM15,14H16V15H15zM17,14H18V15H17zM18,14H19V15H18zM20,14H21V15H20zM21,14H22V15H21zM22,14H23V15H22zM23,14H24V15H23zM24,14H25V15H24zM0,15H1V16H0zM2,15H3V16H2zM4,15H5V16H4zM5,15H6V16H5zM7,15H8V16H7zM10,15H11V16H10zM12,15H13V16H12zM14,15H15V16H14zM16,15H17V16H16zM17,15H18V16H17zM19,15H20V16H19zM21,15H22V16H21zM22,15H23V16H22zM24,15H25V16H24zM0,16H1V17H0zM3,16H4V17H3zM4,16H5V17H4zM6,16H7V17H6zM8,16H9V17H8zM9,16H10V17H9zM11,16H12V17H11zM12,16H13V17H12zM13,16H14V17H13zM15,16H16V17H15zM16,16H17V17H16zM17,16H18V17H17zM18,16H19V17H18zM19,16H20V17H19zM20,16H21V17H20zM22,16H23V17H22zM23,16H24V17H23zM8,17H9V18H8zM9,17H10V18H9zM10,17H11V18H10zM11,17H12V18H11zM16,17H17V18H16zM20,17H21V18H20zM22,17H23V18H22zM23,17H24V18H23zM0,18H1V19H0zM1,18H2V19H1zM2,18H3V19H2zM3,18H4V19H3zM4,18H5V19H4zM5,18H6V19H5zM6,18H7V19H6zM8,18H9V19H8zM9,18H10V19H9zM12,18H13V19H12zM13,18H14V19H13zM16,18H17V19H16zM18,18H19V19H18zM20,18H21V19H20zM24,18H25V19H24zM0,19H1V20H0zM6,19H7V20H6zM8,19H9V20H8zM9,19H10V20H9zM10,19H11V20H10zM11,19H12V20H11zM13,19H14V20H13zM15,19H16V20H15zM16,19H17V20H16zM20,19H21V20H20zM0,20H1V21H0zM2,20H3V21H2zM3,20H4V21H3zM4,20H5V21H4zM6,20H7V21H6zM8,20H9V21H8zM9,20H10V21H9zM11,20H12V21H11zM13,20H14V21H13zM15,20H16V21H15zM16,20H17V21H16zM17,20H18V21H17zM18,20H19V21H18zM19,20H20V21H19zM20,20H21V21H20zM23,20H24V21H23zM24,20H25V21H24zM0,21H1V22H0zM2,21H3V22H2zM3,21H4V22H3zM4,21H5V22H4zM6,21H7V22H6zM8,21H9V22H8zM10,21H11V22H10zM12,21H13V22H12zM13,21H14V22H13zM14,21H15V22H14zM16,21H17V22H16zM18,21H19V22H18zM23,21H24V22H23zM24,21H25V22H24zM0,22H1V23H0zM2,22H3V23H2zM3,22H4V23H3zM4,22H5V23H4zM6,22H7V23H6zM9,22H10V23H9zM11,22H12V23H11zM13,22H14V23H13zM15,22H16V23H15zM17,22H18V23H17zM20,22H21V23H20zM21,22H22V23H21zM22,22H23V23H22zM23,22H24V23H23zM24,22H25V23H24zM0,23H1V24H0zM6,23H7V24H6zM9,23H10V24H9zM10,23H11V24H10zM11,23H12V24H11zM12,23H13V24H12zM13,23H14V24H13zM15,23H16V24H15zM19,23H20V24H19zM20,23H21V24H20zM22,23H23V24H22zM23,23H24V24H23zM24,23H25V24H24zM0,24H1V25H0zM1,24H2V25H1zM2,24H3V25H2zM3,24H4V25H3zM4,24H5V25H4zM5,24H6V25H5zM6,24H7V25H6zM8,24H9V25H8zM9,24H10V25H9zM10,24H11V25H10zM11,24H12V25H11zM12,24H13V25H12zM13,24H14V25H13zM16,24H17V25H16zM17,24H18V25H17zM21,24H22V25H21zM24,24H25V25H24z" id="qr-path" fill="#000000" fill-opacity="1" fill-rule="nonzero" stroke="none"/></svg></div>
+  </div>
+  <div class="fine">Runtime depends on usage. Subscription required for location services. Track third parties only with their consent. © PAJ UG (haftungsbeschränkt)</div>
+</div></section>
+</body></html>

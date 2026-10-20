@@ -3,7 +3,7 @@
 const { chromium } = require('playwright');
 const path = require('path');
 
-const docs = ['icp', 'competitors', 'positioning', 'messaging'];
+const docs = ['icp', 'competitors', 'positioning', 'messaging', 'sales-allround'];
 
 (async () => {
   const browser = await chromium.launch();
