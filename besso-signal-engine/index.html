@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trade Signal Engine — MVP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f4ef; --panel:#ffffff; --ink:#14213d; --ink2:#4a5672; --muted:#8a93a8; --line:#e3e1d8;
+  --accent:#0f766e; --accent-soft:#e6f2f0;
+  --threat:#b42318; --threat-soft:#fdecea;
+  --opp:#15803d; --opp-soft:#e8f5ec;
+  --comp:#b45309; --comp-soft:#fdf3e4;
+  --radius:10px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 "Instrument Sans",system-ui,sans-serif}
+.mono{font-family:"JetBrains Mono",monospace;font-size:12px}
+header{padding:20px 28px 0;display:flex;flex-wrap:wrap;align-items:flex-end;gap:16px;justify-content:space-between}
+h1{font-size:22px;margin:0;letter-spacing:-.01em}
+h1 small{display:block;font-size:13px;font-weight:400;color:var(--ink2);margin-top:2px}
+h2{font-size:15px;margin:0 0 10px}
+h3{font-size:13px;margin:0 0 6px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600}
+.ai-status{font-size:12px;padding:5px 10px;border-radius:99px;background:var(--panel);border:1px solid var(--line);color:var(--ink2)}
+.ai-status b{color:var(--accent)}
+.pipeline{display:flex;gap:6px;margin:16px 28px 0;flex-wrap:wrap}
+.pipeline div{flex:1;min-width:120px;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:12px;color:var(--ink2)}
+.pipeline div b{display:block;color:var(--ink);font-size:13px}
+.banner{margin:12px 28px 0;font-size:12px;color:var(--ink2);background:#eceae1;border-radius:8px;padding:7px 12px}
+nav{display:flex;gap:4px;margin:16px 28px 0;border-bottom:1px solid var(--line)}
+nav button{background:none;border:none;padding:10px 14px;font:inherit;font-weight:600;color:var(--ink2);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px}
+nav button.on{color:var(--ink);border-bottom-color:var(--accent)}
+nav .count{font-size:11px;background:var(--accent-soft);color:var(--accent);border-radius:99px;padding:1px 7px;margin-left:4px}
+main{padding:20px 28px 60px}
+.view{display:none}.view.on{display:block}
+.grid{display:grid;grid-template-columns:320px 1fr;gap:20px}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:16px}
+.btn{font:inherit;font-weight:600;font-size:13px;border-radius:8px;padding:8px 14px;cursor:pointer;border:1px solid var(--ink);background:var(--ink);color:#fff}
+.btn.ghost{background:var(--panel);color:var(--ink);border-color:var(--line)}
+.btn.small{padding:5px 10px;font-size:12px}
+.btn:disabled{opacity:.5;cursor:default}
+.event{border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin-bottom:8px;cursor:pointer;background:var(--panel)}
+.event:hover{border-color:var(--ink2)}
+.event.on{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-soft)}
+.event .t{font-weight:600;font-size:13px;line-height:1.35}
+.event .m{font-size:11px;color:var(--muted);margin-top:4px;display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.tag{display:inline-block;font-size:11px;font-weight:600;border-radius:4px;padding:1px 6px;text-transform:uppercase;letter-spacing:.03em}
+.tag.threat{background:var(--threat-soft);color:var(--threat)}
+.tag.opportunity{background:var(--opp-soft);color:var(--opp)}
+.tag.compliance{background:var(--comp-soft);color:var(--comp)}
+.tag.neutral{background:#eef0f4;color:var(--ink2)}
+.win{font-size:11px;font-weight:600}
+.win.hot{color:var(--threat)}.win.live{color:var(--comp)}.win.fading{color:var(--muted)}
+.fields{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:12px 0}
+.fields div{background:var(--bg);border-radius:6px;padding:8px 10px}
+.fields label{display:block;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.evidence{border-left:3px solid var(--accent);padding:6px 12px;color:var(--ink2);font-style:italic;background:var(--accent-soft);border-radius:0 6px 6px 0;margin:10px 0}
+.fresh{height:6px;background:var(--line);border-radius:99px;overflow:hidden;margin-top:4px}
+.fresh i{display:block;height:100%;background:var(--accent)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:600;padding:8px;border-bottom:1px solid var(--line)}
+td{padding:9px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+tr.row{cursor:pointer}
+tr.row:hover td{background:#faf9f5}
+.score{display:flex;align-items:center;gap:8px;min-width:110px}
+.score .bar{flex:1;height:8px;background:var(--line);border-radius:99px;overflow:hidden}
+.score .bar i{display:block;height:100%;background:var(--ink)}
+.score b{width:26px;text-align:right}
+.chip{display:inline-block;font-size:11px;background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:0 6px;margin:1px 2px 1px 0;color:var(--ink2)}
+.empty{color:var(--muted);text-align:center;padding:30px}
+.drawer-bg{position:fixed;inset:0;background:rgba(20,33,61,.35);display:none;z-index:10}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(560px,100%);background:var(--panel);z-index:11;transform:translateX(100%);transition:transform .2s;overflow:auto;padding:22px;box-shadow:-10px 0 30px rgba(0,0,0,.1)}
+.drawer.on{transform:none}.drawer-bg.on{display:block}
+.drawer .close{float:right}
+.out{background:var(--bg);border-radius:8px;padding:12px;white-space:pre-wrap;margin:6px 0 14px;font-size:13px}
+.out[contenteditable]{outline:none;border:1px dashed transparent}
+.out[contenteditable]:focus{border-color:var(--accent);background:#fff}
+textarea,input[type=text],select{width:100%;font:inherit;border:1px solid var(--line);border-radius:8px;padding:9px 10px;background:#fff;color:var(--ink)}
+textarea{min-height:180px;resize:vertical}
+.modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:20;background:rgba(20,33,61,.4)}
+.modal.on{display:flex}
+.modal .box{background:var(--panel);border-radius:12px;padding:22px;width:min(680px,94%);max-height:90vh;overflow:auto}
+.row-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.note{font-size:12px;color:var(--muted)}
+.err{color:var(--threat);font-size:13px;margin-top:8px}
+.spin{display:inline-block;width:12px;height:12px;border:2px solid var(--line);border-top-color:var(--accent);border-radius:50%;animation:s 1s linear infinite;vertical-align:-2px;margin-right:6px}
+@keyframes s{to{transform:rotate(360deg)}}
+.how{max-width:860px}
+.how .panel{margin-bottom:14px}
+.how ol{padding-left:18px;margin:6px 0}
+.how code{background:var(--bg);padding:1px 5px;border-radius:4px}
+.toolbar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:9px 16px;border-radius:8px;font-size:13px;opacity:0;transition:opacity .2s;z-index:30;pointer-events:none}
+.toast.on{opacity:1}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Trade Signal Engine <small>Trade, tariff and regulatory triggers → affected accounts → campaigns that launch while the topic is live</small></h1>
+  <span class="ai-status" id="aiStatus"><span class="spin"></span>Connecting AI…</span>
+</header>
+
+<div class="pipeline">
+  <div><b>1 · Listen</b>Notices from GTA, ePing, Federal Register, EUR-Lex</div>
+  <div><b>2 · Understand</b>AI extracts type, corridor, HS codes, dates</div>
+  <div><b>3 · Map</b>HS × trade corridor match against accounts</div>
+  <div><b>4 · Score</b>Severity × exposure × fit × freshness</div>
+  <div><b>5 · Activate</b>AI-drafted outreach, approved by a human</div>
+</div>
+<div class="banner"><b>Real data, as of 18 Nov 2026.</b> Each event links to its source. The account book lists real companies, but their exposure profiles (production countries, product codes, markets, suppliers) are estimates from public information, so check them before any outreach. CRM fields (tier, stage, owner) stay empty until you import your CRM export.</div>
+
+<nav>
+  <button class="on" data-v="signals">Signals</button>
+  <button data-v="accounts">Account book</button>
+  <button data-v="queue">Activation queue <span class="count" id="qCount">0</span></button>
+  <button data-v="how">How it works</button>
+</nav>
+
+<main>
+  <!-- SIGNALS -->
+  <section class="view on" id="v-signals">
+    <div class="grid">
+      <div>
+        <div class="toolbar"><h2 style="margin:0">Detected events</h2><button class="btn small" id="newBtn">+ New notice</button></div>
+        <div id="eventList"></div>
+      </div>
+      <div>
+        <div class="panel" id="eventDetail"></div>
+        <div class="panel" style="margin-top:16px">
+          <div class="toolbar">
+            <h2 style="margin:0">Affected accounts <span class="note" id="matchCount"></span></h2>
+            <div style="display:flex;gap:8px">
+              <button class="btn ghost small" id="copyMatches">Copy as CSV</button>
+            </div>
+          </div>
+          <div id="matches"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ACCOUNTS -->
+  <section class="view" id="v-accounts">
+    <div class="panel">
+      <div class="toolbar">
+        <h2 style="margin:0">Account book · exposure profiles</h2>
+        <div style="display:flex;gap:8px;align-items:center">
+          <label class="btn ghost small" style="cursor:pointer">Import CSV<input type="file" id="csvIn" accept=".csv,text/csv" hidden></label>
+          <button class="btn ghost small" id="resetAcc">Reset to real accounts</button>
+        </div>
+      </div>
+      <p class="note" style="margin-top:0">Exposure profiles below are estimated from public company information. To use your own book, import a CSV with the columns <span class="mono">name, hq, segment, hs, inputs, origins, sources, markets, tags, tier, stage, owner</span>. Separate several values with <span class="mono">;</span> (e.g. <span class="mono">2933;3004</span>, <span class="mono">DE;CH</span>). <i>hs</i> is what the company sells, <i>inputs</i> what it buys, <i>origins</i> where it produces, <i>sources</i> where its suppliers are, <i>markets</i> where it sells (ISO codes, or EU). Tag <span class="mono">generics</span> to apply the pharma carve-outs.</p>
+      <div style="overflow:auto"><table id="accTable"></table></div>
+    </div>
+  </section>
+
+  <!-- QUEUE -->
+  <section class="view" id="v-queue">
+    <div class="panel">
+      <div class="toolbar">
+        <h2 style="margin:0">Approved for launch</h2>
+        <button class="btn ghost small" id="copyQueue">Copy queue as CSV</button>
+      </div>
+      <p class="note" style="margin-top:0">In production, approving pushes a CRM task to the account owner, adds the contact to a Marketo/HubSpot program and posts an alert in Slack or Teams. Here the queue is the hand-off list.</p>
+      <div id="queue"></div>
+    </div>
+  </section>
+
+  <!-- HOW -->
+  <section class="view how" id="v-how">
+    <div class="panel">
+      <h2>What this MVP does</h2>
+      <ol>
+        <li><b>Intake:</b> paste any tariff notice, trade agreement text or regulation. The AI turns it into a structured event: type, stage, direction (threat / opportunity / compliance), imposing jurisdiction, affected origins, HS headings, effective date, severity and the sentence that supports it.</li>
+        <li><b>Matching:</b> each account has an exposure profile: the HS codes it sells, the HS codes it buys (inputs), where it produces, where its suppliers are, and where it sells. The engine matches HS headings (or whole chapters, where a measure covers a chapter) and the trade corridor, then labels each account <i>exporter</i>, <i>importer</i>, <i>buyer of inputs</i> or <i>seller in market</i>. It also applies each measure's carve-outs: the UK exemption and the 15% cap in the US pharma tariff, the exclusion of generics, and pharma's exemption from Section 301.</li>
+        <li><b>Scoring:</b> <code>score = severity × HS match × corridor × ICP fit × pipeline stage × campaign window</code>. The campaign window is open right after a story breaks (it halves every 14 days) and opens again as the next milestone approaches, such as an effective date, a signature or an expiry. That is why the polysilicon measure from August is hot again now. Tier and stage count only once they come from your CRM.</li>
+        <li><b>Activation:</b> for any account, the AI drafts an impact note, a campaign angle, an email and a LinkedIn post. The tone leads with help, not fear. A person edits and approves the draft before it goes to the queue.</li>
+      </ol>
+    </div>
+    <div class="panel">
+      <h2>Data in this version</h2>
+      <ol>
+        <li><b>Events:</b> nine real trade and regulatory measures, researched on 18 Nov 2026 from official and professional sources (Federal Register, Global Trade Alert, S&amp;P Global, law-firm alerts, NutraIngredients). Each one links to its source. The HS headings are the engine's mapping of each measure's scope, and every event explains its mapping.</li>
+        <li><b>Accounts:</b> 24 real life-sciences, chemicals and machinery companies with a Swiss or EU base. Their exposure profiles are estimated from public company information. In production these come from trade data (Panjiva, ImportGenius) and the CRM.</li>
+      </ol>
+    </div>
+    <div class="panel">
+      <h2>From MVP to production</h2>
+      <ol>
+        <li><b>Automatic ingestion</b> every few hours from the Global Trade Alert API, WTO ePing, the Federal Register API, EUR-Lex, and a news API. Duplicates are merged and each event links to its official source.</li>
+        <li><b>Richer exposure profiles</b> from import/export records (Panjiva, ImportGenius) and AI classification of the accounts' product pages into HS codes.</li>
+        <li><b>CRM sync:</b> read accounts from Salesforce or HubSpot; write tasks, campaign members and alerts back.</li>
+        <li><b>Learning loop:</b> track replies and meetings for each trigger type, and re-weight the scoring.</li>
+      </ol>
+    </div>
+  </section>
+</main>
+
+<!-- drawer -->
+<div class="drawer-bg" id="drawerBg"></div>
+<aside class="drawer" id="drawer"></aside>
+
+<!-- modal -->
+<div class="modal" id="modal">
+  <div class="box">
+    <h2>New notice</h2>
+    <p class="note" style="margin-top:0">Paste the text of a tariff notice, trade agreement, regulation or news article. The AI extracts the event and the engine matches it against your account book.</p>
+    <input type="text" id="srcUrl" placeholder="Source URL (optional)" style="margin-bottom:8px">
+    <textarea id="noticeText" placeholder="Paste notice text here…"></textarea>
+    <div class="err" id="modalErr"></div>
+    <div class="row-actions">
+      <button class="btn" id="extractBtn">Extract event with AI</button>
+      <button class="btn ghost" id="cancelBtn">Cancel</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const TODAY = new Date("2026-11-18T12:00:00");
+const EU = ['AT','BE','BG','HR','CY','CZ','DK','EE','FI','FR','DE','GR','HU','IE','IT','LV','LT','LU','MT','NL','PL','PT','RO','SK','SI','ES','SE'];
+
+/* Real events, researched 18 Nov 2026. Each links to its source. HS headings are the engine's mapping of the measure's product scope. */
+const REAL_EVENTS = [
+  {id:"cn-ree", title:"China extends pause on expanded rare-earth export controls only to 10 Jan 2027",
+   type:"export_control", stage:"in force", direction:"threat", imposer:"CN", origins:[],
+   hs:["2805","2846","8505","3801","8507"], published:"2026-11-09", milestone:{date:"2027-01-10",label:"Pause expires"},
+   severity:3, source:"S&P Global Commodity Insights", url:"https://www.spglobal.com/energy/en/news-research/latest-news/metals/110926-china-extends-rare-earth-export-suspension-to-january-2027",
+   summary:"On 9 November China's Ministry of Commerce extended the suspension of its October 2025 export controls (more rare earths, processing technology, lithium batteries, graphite anode material) by two months only, to 10 January 2027. Licensing for seven medium and heavy rare earths introduced in April 2025, including gadolinium, terbium and dysprosium, stays in force.",
+   hs_note:"Rare-earth metals 2805, rare-earth compounds 2846, permanent magnets 8505, graphite 3801, Li-ion batteries 8507. Matched against what accounts buy, not what they sell."},
+  {id:"us-polysilicon", title:"US: Section 232 price floors and 15% tariff on polysilicon and solar derivatives start 4 Dec 2026",
+   type:"tariff", stage:"adopted", direction:"threat", imposer:"US", origins:[],
+   hs:["2804","3818","8541"], published:"2026-08-06", effective_date:"2026-12-04", milestone:{date:"2026-12-04",label:"Takes effect"},
+   severity:4, origin_notes:{GB:"price floor; +10% on derivatives"}, default_note:"price floor; +15% on derivatives",
+   source:"Hunton Andrews Kurth", url:"https://www.hunton.com/insights/legal/us-imposes-new-tariffs-and-minimum-import-prices-on-polysilicon-and-solar-products",
+   summary:"From 4 December 2026, imported polysilicon and its derivatives must meet minimum import prices ($21/kg polysilicon, $100/kg ingots and wafers, $0.22/W cells, $0.38/W modules). Downstream derivatives (not raw polysilicon) also pay an extra 15% Section 232 duty (10% for UK products).",
+   hs_note:"Silicon 2804, doped wafers 3818, solar cells and modules 8541."},
+  {id:"eu-in-fta", title:"EU–India FTA heads to signature: India's tariffs of up to 22% on EU chemicals largely go at entry into force",
+   type:"trade_agreement", stage:"awaiting signature", direction:"opportunity", imposer:"IN", origins:["EU"],
+   hs:["28","29","32","34","38","3304"], published:"2026-09-11", milestone:{date:"2026-12-15",label:"Signature expected (Dec 2026, estimated date)"},
+   severity:4, source:"Conventus Law", url:"https://conventuslaw.com/report/the-india-eu-free-trade-agreement-a-landmark-deal-moves-toward-finalisation/",
+   summary:"On 11 September 2026 the Commission asked the Council to authorise signing the FTA concluded in January. Signature is expected in December 2026 and entry into force in early 2027. India's tariffs of up to 22% on EU chemicals are largely removed at entry into force; cosmetics tariffs are phased out over 5–7 years.",
+   hs_note:"Chemical chapters 28, 29, 32, 34, 38 and cosmetics 3304. Swiss sites do not qualify (EU origin only)."},
+  {id:"us-robotics", title:"US: Section 232 finding on robotics and industrial machinery. Negotiations first, no tariff yet",
+   type:"tariff", stage:"proposed", direction:"threat", imposer:"US", origins:[],
+   hs:["8479","8428","8456","8457","8458","8459","8460","8461","8462","8466"], published:"2026-10-28", milestone:{date:"2027-04-26",label:"Negotiation report due"},
+   severity:3, default_note:"tariff possible, rate not set",
+   source:"Mayer Brown", url:"https://www.mayerbrown.com/en/insights/publications/2026/10/president-trump-issues-proclamation-on-imports-of-robotics-industrial-machinery-and-their-parts-and-components",
+   summary:"The President agreed with Commerce that imports of robotics, industrial machinery and their parts threaten US national security, and ordered negotiations with trading partners instead of immediate duties. Commerce and USTR report back within 180 days (around 26 April 2027); tariffs, quotas or fees remain possible.",
+   hs_note:"Industrial robots and machines 8479, handling equipment 8428, machine tools 8456–8462, tool parts 8466."},
+  {id:"us-pharma-232", title:"US: Section 232 tariffs on patented medicines and APIs in force (up to 100%; 15% cap for EU, CH, JP, KR)",
+   type:"tariff", stage:"in force", direction:"threat", imposer:"US", origins:[], exempt_origins:["GB"], exempt_tags:["generics"],
+   hs:["3002","3004","2933","2934","2937","2941"], published:"2026-04-09", effective_date:"2026-07-31",
+   severity:5, origin_notes:{EU:"15% all-in cap",CH:"15% all-in cap",JP:"15% all-in cap",KR:"15% all-in cap"}, default_note:"up to 100%",
+   source:"Federal Register 2026-06956", url:"https://www.federalregister.gov/d/2026-06956",
+   summary:"Patented medicines, biologics, APIs and key starting materials pay up to 100% from 31 July 2026 (listed large companies) and 29 September 2026 (all others). EU, Swiss, Japanese and Korean products are capped at 15% including the normal duty, UK products pay 0%, approved US onshoring plans pay 20%, and generics and biosimilars are excluded for now.",
+   hs_note:"Biologics 3002, medicaments 3004, API headings 2933, 2934, 2937, 2941. Accounts tagged 'generics' are excluded."},
+  {id:"us-generics", title:"US: announced phased tariff on generic drugs (0% until Aug 2028, then 100%)",
+   type:"tariff", stage:"announced", direction:"threat", imposer:"US", origins:[], only_tags:["generics"],
+   hs:["3004","3002","2941","2933","2942"], published:"2026-07-22", milestone:{date:"2028-08-01",label:"100% tariff would start"},
+   severity:3, default_note:"0% now, 100% from Aug 2028",
+   source:"PwC Tax Insights", url:"https://www.pwc.com/us/en/tax-services/publications/insights/assets/pwc-proposed-tariffs-on-generic-pharma-what-companies-should-know.pdf",
+   summary:"A July 2026 announcement set out a phased Section 232 framework for imported generics: no additional duty for a two-year transition from 1 August 2026, 100% from 1 August 2028, and higher after that. It has been announced but not yet signed.",
+   hs_note:"Only accounts tagged 'generics' are matched."},
+  {id:"us-301-fl", title:"US: Section 301 forced-labour tariffs of 10–12.5% on goods from 60 economies",
+   type:"tariff", stage:"in force", direction:"threat", imposer:"US", origins:["EU","CH","JP","KR","CN","VN","BR","IL","AU","CA","MX","IN","GB"],
+   hs:["*"], exempt_hs:["30","2804","3818","8541"], published:"2026-07-24", effective_date:"2026-07-24",
+   severity:3, origin_notes:{EU:"10% all-in",CH:"12.5% all-in",JP:"12.5% all-in",KR:"12.5% all-in",IN:"+10%",GB:"+10%",CA:"+10%",MX:"+10%",CN:"+12.5%",VN:"+12.5%",BR:"+12.5%",IL:"+12.5%",AU:"+12.5%"},
+   source:"Global Trade Alert", url:"https://globaltradealert.org/blog/forced-labour-section-301-final-action",
+   summary:"Since 24 July 2026 most goods from 60 economies pay an extra 10% or 12.5%. For the EU it is 10% including the normal duty; for Switzerland, Japan and Korea, 12.5% including it. Goods under Section 232 tariffs and Annex II items, including pharmaceuticals, are exempt.",
+   hs_note:"All products, except pharmaceuticals (chapter 30) and goods under Section 232 tariffs. The origins listed are a selection of the 60."},
+  {id:"eu-us-deal", title:"EU implements the US framework deal: tariffs on US industrial goods eliminated",
+   type:"trade_agreement", stage:"in force", direction:"opportunity", imposer:"EU", origins:["US"],
+   hs:["28","29","38","39","84","85","90"], published:"2026-06-25",
+   severity:3, source:"Barnes Richardson", url:"https://www.barnesrichardson.com/european-union-implements-us-trade-deal",
+   summary:"On 25 June 2026 the EU adopted the regulations implementing its 2025 framework deal with the US. Tariffs on US industrial goods are removed, some agricultural and seafood products get preferential access, and a safeguard clause lets the EU reimpose duties.",
+   hs_note:"Main industrial chapters: chemicals 28, 29, 38; plastics 39; machinery 84; electrical 85; instruments 90. Pharma (30) is already duty-free."},
+  {id:"eu-mpl", title:"EU: consultation on EU-wide maximum levels for vitamins and minerals in supplements",
+   type:"regulation", stage:"consultation", direction:"compliance", imposer:"EU", origins:[],
+   hs:["2106","2936"], published:"2026-07-17", milestone:{date:"2028-03-31",label:"Adoption planned (Q1 2028)"},
+   severity:3, source:"NutraIngredients", url:"https://www.nutraingredients.com/Article/2026/07/17/mid-year-regulatory-round-up-updates-from-europe/",
+   summary:"In June 2026 the Commission opened a call for evidence and a public consultation on harmonised maximum permitted levels for vitamins and minerals in supplements and fortified foods. The final rules are planned for Q1 2028, and consultants warn that high-dose products may need reformulating and relabelling.",
+   hs_note:"Supplement preparations 2106, vitamins 2936."}
+];
+
+/* Real companies. Exposure profiles are estimates from public company information (HQ, main production countries, product lines). CRM fields stay empty until a CRM export is imported. */
+const REAL_ACCOUNTS = [
+  {name:"Roche", hq:"CH", url:"https://www.roche.com", segment:"Pharma & diagnostics", hs:["3002","3004","3822"], origins:["CH","DE","US"], sources:[], inputs:[], markets:["US","EU","CN","JP"], tags:[]},
+  {name:"Novartis", hq:"CH", url:"https://www.novartis.com", segment:"Innovative medicines", hs:["3002","3004"], origins:["CH","AT","SI","US"], sources:[], inputs:[], markets:["US","EU","CN","JP"], tags:[]},
+  {name:"Lonza", hq:"CH", url:"https://www.lonza.com", segment:"Pharma & biotech CDMO", hs:["3002","2933","2934"], origins:["CH","US"], sources:[], inputs:[], markets:["US","EU","JP"], tags:[]},
+  {name:"Siegfried", hq:"CH", url:"https://www.siegfried.ch", segment:"API & drug-product CDMO", hs:["2933","2934","3004"], origins:["CH","DE","ES","FR","MT","US","CN"], sources:[], inputs:[], markets:["US","EU"], tags:[]},
+  {name:"Bachem", hq:"CH", url:"https://www.bachem.com", segment:"Peptide & oligonucleotide APIs", hs:["2937","2934"], origins:["CH","US","GB"], sources:[], inputs:[], markets:["US","EU","JP"], tags:[]},
+  {name:"Sandoz", hq:"CH", url:"https://www.sandoz.com", segment:"Generics & biosimilars", hs:["3004","2941","3002"], origins:["AT","SI","DE"], sources:[], inputs:[], markets:["US","EU"], tags:["generics"]},
+  {name:"Dr. Reddy's Laboratories", hq:"IN", url:"https://www.drreddys.com", segment:"Generics & APIs", hs:["3004","2933","2942"], origins:["IN"], sources:[], inputs:[], markets:["US","EU","IN"], tags:["generics"]},
+  {name:"Sun Pharmaceutical", hq:"IN", url:"https://sunpharma.com", segment:"Generics & specialty pharma", hs:["3004","2933"], origins:["IN"], sources:[], inputs:[], markets:["US","IN"], tags:["generics"]},
+  {name:"Divi's Laboratories", hq:"IN", url:"https://www.divislabs.com", segment:"APIs & custom synthesis", hs:["2933","2942"], origins:["IN"], sources:[], inputs:[], markets:["US","EU"], tags:[]},
+  {name:"Bayer", hq:"DE", url:"https://www.bayer.com", segment:"Pharma, consumer health, crop science", hs:["3004","3006","2106","3808"], origins:["DE"], sources:["CN"], inputs:["2846"], markets:["US","EU","CN","IN"], tags:[]},
+  {name:"Guerbet", hq:"FR", url:"https://www.guerbet.com", segment:"Contrast media", hs:["3006"], origins:["FR"], sources:["CN"], inputs:["2846"], markets:["US","EU","JP"], tags:[]},
+  {name:"dsm-firmenich", hq:"CH", url:"https://www.dsm-firmenich.com", segment:"Vitamins, nutrition & aroma ingredients", hs:["2936","2106","3302"], origins:["CH","FR","DE","NL","CN"], sources:[], inputs:[], markets:["US","EU","CN","IN"], tags:[]},
+  {name:"Nestlé Health Science", hq:"CH", url:"https://www.nestlehealthscience.com", segment:"Supplements & medical nutrition", hs:["2106"], origins:["CH","US","DE"], sources:[], inputs:[], markets:["US","EU","CN"], tags:[]},
+  {name:"BASF", hq:"DE", url:"https://www.basf.com", segment:"Chemicals incl. vitamins & crop protection", hs:["2936","2905","3907","3808"], origins:["DE","BE","US","CN"], sources:[], inputs:[], markets:["US","EU","IN","CN"], tags:[]},
+  {name:"Clariant", hq:"CH", url:"https://www.clariant.com", segment:"Specialty chemicals & catalysts", hs:["3402","3815","3824"], origins:["CH","DE","US","IN","CN"], sources:[], inputs:[], markets:["EU","US","IN","CN"], tags:[]},
+  {name:"Evonik", hq:"DE", url:"https://www.evonik.com", segment:"Specialty chemicals", hs:["2930","2803","3906"], origins:["DE","BE","US"], sources:[], inputs:[], markets:["EU","US","IN","CN"], tags:[]},
+  {name:"Wacker Chemie", hq:"DE", url:"https://www.wacker.com", segment:"Polysilicon & silicones", hs:["2804","3910"], origins:["DE","US"], sources:[], inputs:[], markets:["US","EU","CN"], tags:[]},
+  {name:"Vacuumschmelze (VAC)", hq:"DE", url:"https://vacuumschmelze.com", segment:"Rare-earth permanent magnets", hs:["8505"], origins:["DE","US"], sources:["CN"], inputs:["2805","2846"], markets:["EU","US","CN"], tags:[]},
+  {name:"ABB", hq:"CH", url:"https://www.abb.com", segment:"Electrification & motion", hs:["8501","8504","8535","8537"], origins:["CH","SE","FI","CN","US"], sources:["CN"], inputs:["8505"], markets:["US","EU","CN","IN"], tags:[]},
+  {name:"KUKA", hq:"DE", url:"https://www.kuka.com", segment:"Industrial robots", hs:["8479"], origins:["DE","CN","HU"], sources:["CN"], inputs:["8505"], markets:["US","EU","CN"], tags:[]},
+  {name:"Stäubli", hq:"CH", url:"https://www.staubli.com", segment:"Robotics & connectors", hs:["8479","8536"], origins:["CH","FR","DE"], sources:[], inputs:[], markets:["US","EU","CN"], tags:[]},
+  {name:"Bühler", hq:"CH", url:"https://www.buhlergroup.com", segment:"Food & materials processing machinery", hs:["8437","8438","8474","8479"], origins:["CH","DE","CN","IN"], sources:[], inputs:[], markets:["US","EU","IN","CN"], tags:[]},
+  {name:"UNITED GRINDING Group", hq:"CH", url:"https://www.grinding.ch", segment:"Grinding & machine tools", hs:["8460","8456","8466"], origins:["CH","DE","US"], sources:[], inputs:[], markets:["US","EU","CN"], tags:[]},
+  {name:"DMG MORI", hq:"DE/JP", url:"https://www.dmgmori.com", segment:"Machine tools", hs:["8457","8458","8466"], origins:["DE","JP","IT","PL"], sources:[], inputs:[], markets:["US","EU","CN"], tags:[]}
+].map(a=>({...a, tier:"", stage:"", owner:""}));
+
+let events = JSON.parse(JSON.stringify(REAL_EVENTS));
+let accounts = JSON.parse(JSON.stringify(REAL_ACCOUNTS));
+let selected = null;
+let queue = [];
+let sampleFn = null;
+
+/* ---------- helpers ---------- */
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const days = (a,b) => Math.round((b - a) / 864e5);
+const D = s => new Date(s+"T12:00:00");
+function expand(list){ const s = new Set(list||[]); if((list||[]).some(c=>EU.includes(c))) s.add("EU"); if(s.has("EU")) EU.forEach(c=>s.add(c)); return s; }
+function toast(t){ const el=$("#toast"); el.textContent=t; el.classList.add("on"); setTimeout(()=>el.classList.remove("on"),1800); }
+function fmtDate(d){ if(!d) return "—"; const x=D(d); return isNaN(x)?d:x.toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"}); }
+const TYPE_LABEL = {tariff:"Tariff", trade_agreement:"Trade agreement", regulation:"Regulation", sanction:"Sanction", export_control:"Export control", other:"Other"};
+
+/* Campaign window: a topic is live right after it breaks (half-life 14 days)
+   and again as its next milestone approaches (within 75 days). Floor 0.15 for measures still in play. */
+function freshness(ev){
+  const d = Math.max(0, days(D(ev.published), TODAY));
+  let f = Math.pow(0.5, d/14), dm = null, byMilestone = false;
+  if(ev.milestone){ dm = days(TODAY, D(ev.milestone.date)); if(dm>=0 && dm<=75){ const m = 1 - dm/75; if(m>f){f=m; byMilestone=true;} } }
+  f = Math.max(0.15, f);
+  const label = f>=0.6 ? "hot" : f>=0.3 ? "live" : "fading";
+  return {d, f, label, dm, byMilestone};
+}
+
+/* ---------- matching & scoring ---------- */
+function hsMatch(evHs, codes, exempt){
+  const clean = x => String(x).replace(/\D/g,"");
+  const ok = (codes||[]).map(clean).filter(c => !(exempt||[]).some(p => c.startsWith(clean(p))));
+  if(!ok.length) return {score:0};
+  if((evHs||[]).includes("*")) return {score:0.7, hit:"all products", n:1};
+  const full = new Set();
+  for(const c of ok){ for(const e0 of evHs||[]){ const e = clean(e0);
+    if(c.startsWith(e)) full.add(c);
+  } }
+  if(full.size) return {score:Math.min(1, 0.7 + 0.15*(full.size-1)), hit:[...full].join(", "), n:full.size};
+  return {score:0};
+}
+
+function corridor(ev, acc){
+  const impSet = expand([ev.imposer]);
+  const exempt = expand(ev.exempt_origins||[]);
+  const abroad = [...new Set(acc.origins)].filter(c => !impSet.has(c) && !exempt.has(c) && !(EU.includes(c) && exempt.has("EU")));
+  const evOrig = expand(ev.origins||[]);
+  const any = !(ev.origins||[]).length;
+  const hitOrig = abroad.filter(c => any || evOrig.has(c));
+  const markets = expand(acc.markets), sources = expand(acc.sources);
+  const basedIn = expand(acc.origins);
+  const note = list => { const n = ev.origin_notes||{}; for(const c of list){ const k = n[c] ? c : (EU.includes(c) && n.EU ? "EU" : null); if(k) return `${n[k]} (${c})`; } return ev.default_note||""; };
+
+  if(ev.type==="export_control"){
+    if([...sources].some(s => impSet.has(s))) return {score:1, role:`Buys inputs from ${ev.imposer}`};
+    return {score:0};
+  }
+  if(ev.direction==="compliance"){
+    if(markets.has(ev.imposer) || [...basedIn].some(c=>impSet.has(c))) return {score:1, role:`Sells in ${ev.imposer}`};
+    return {score:0};
+  }
+  if(ev.direction==="opportunity"){
+    if(hitOrig.length) return markets.has(ev.imposer) ? {score:1, role:`Exporter · grow share in ${ev.imposer}`, note:note(hitOrig)} : {score:0.7, role:`Exporter · market entry ${ev.imposer}`, note:note(hitOrig)};
+    if([...basedIn].some(c=>impSet.has(c)) && !any && [...sources].some(s=>evOrig.has(s))) return {score:0.8, role:"Importer · cheaper sourcing"};
+    return {score:0};
+  }
+  if(markets.has(ev.imposer) && hitOrig.length) return {score:1, role:`Exporter into ${ev.imposer}`, note:note(hitOrig)};
+  if([...basedIn].some(c=>impSet.has(c)) && !any && [...sources].some(s=>evOrig.has(s))) return {score:0.8, role:"Importer · supply cost"};
+  return {score:0};
+}
+
+const TIER = {A:1, B:0.75, C:0.5};
+const STAGE = {"Open opportunity":1.2, "Customer":1.1, "Prospect":1};
+
+function matchEvent(ev){
+  const fr = freshness(ev);
+  const out = [];
+  for(const acc of accounts){
+    const tags = acc.tags||[];
+    if(ev.only_tags && !ev.only_tags.some(t=>tags.includes(t))) continue;
+    if(ev.exempt_tags && ev.exempt_tags.some(t=>tags.includes(t))) continue;
+    const codes = ev.type==="export_control" ? acc.inputs : acc.hs;
+    const h = hsMatch(ev.hs, codes, ev.exempt_hs); if(!h.score) continue;
+    const c = corridor(ev, acc); if(!c.score) continue;
+    const fit = TIER[acc.tier] ?? 1, st = STAGE[acc.stage] ?? 1;
+    const raw = (ev.severity/5) * h.score * c.score * fit * st * fr.f;
+    out.push({acc, score:Math.max(1, Math.min(100, Math.round(raw*100))), hs:h, cor:c, fit, st});
+  }
+  return out.sort((a,b)=>b.score-a.score || a.acc.name.localeCompare(b.acc.name));
+}
+
+/* ---------- render ---------- */
+function renderEvents(){
+  const sorted = [...events].sort((a,b)=>freshness(b).f-freshness(a).f);
+  if(!selected && sorted.length) selected = sorted[0].id;
+  $("#eventList").innerHTML = sorted.map(ev=>{
+    const fr = freshness(ev), n = matchEvent(ev).length;
+    return `<div class="event ${ev.id===selected?"on":""}" data-id="${ev.id}">
+      <div class="t">${esc(ev.title)}</div>
+      <div class="m"><span class="tag ${esc(ev.direction)}">${esc(ev.direction)}</span>
+      <span>${esc(TYPE_LABEL[ev.type]||ev.type)}</span>·<span class="win ${fr.label}">${fr.label.toUpperCase()}${fr.byMilestone?" · milestone in "+fr.dm+"d":" · "+fr.d+"d old"}</span>·<span>${n} account${n===1?"":"s"}</span></div></div>`;
+  }).join("");
+  document.querySelectorAll(".event").forEach(el=>el.onclick=()=>{selected=el.dataset.id; render();});
+}
+
+function renderDetail(){
+  const ev = events.find(e=>e.id===selected);
+  if(!ev){ $("#eventDetail").innerHTML = `<div class="empty">No event selected</div>`; return; }
+  const fr = freshness(ev);
+  const eff = ev.effective_date ? days(TODAY, D(ev.effective_date)) : null;
+  $("#eventDetail").innerHTML = `
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:6px">
+      <span class="tag ${esc(ev.direction)}">${esc(ev.direction)}</span>
+      <span class="tag neutral">${esc(TYPE_LABEL[ev.type]||ev.type)}</span>
+      <span class="tag neutral">${esc(ev.stage)}</span>
+      <span class="note">Source: ${ev.url?`<a href="${esc(ev.url)}" target="_blank" rel="noopener">${esc(ev.source)}</a>`:esc(ev.source)}</span>
+    </div>
+    <h2 style="font-size:18px;margin:4px 0 6px">${esc(ev.title)}</h2>
+    <div style="color:var(--ink2)">${esc(ev.summary)}</div>
+    ${ev.evidence?`<div class="evidence">“${esc(ev.evidence)}”</div>`:""}
+    <div class="fields">
+      <div><label>Imposed by</label>${esc(ev.imposer)}</div>
+      <div><label>Affected origins</label>${esc((ev.origins||[]).join(", ")||"All origins")}${ev.exempt_origins&&ev.exempt_origins.length?`<div class="note">Exempt: ${esc(ev.exempt_origins.join(", "))}</div>`:""}</div>
+      <div><label>Product scope (HS)</label><span class="mono">${esc((ev.hs||[]).map(h=>h==="*"?"all products":h).join(" · "))}</span></div>
+      <div><label>Published</label>${fmtDate(ev.published)}</div>
+      <div><label>Effective</label>${fmtDate(ev.effective_date)}${eff!==null?` <span class="note">(${eff>=0?"in "+eff+"d":Math.abs(eff)+"d ago"})</span>`:""}</div>
+      <div><label>Next milestone</label>${ev.milestone?`${esc(ev.milestone.label)}<div class="note">${fmtDate(ev.milestone.date)} (${fr.dm>=0?"in "+fr.dm+"d":"passed"})</div>`:"—"}</div>
+      <div><label>Severity</label>${"●".repeat(ev.severity)}${"○".repeat(5-ev.severity)}</div>
+      ${ev.confidence!=null?`<div><label>Extraction confidence</label>${Math.round(ev.confidence*100)}%</div>`:""}
+      <div><label>Campaign window</label><span class="win ${fr.label}">${fr.label.toUpperCase()}</span> · ${fr.byMilestone?"milestone approaching":"published "+fr.d+"d ago"}<div class="fresh"><i style="width:${Math.round(fr.f*100)}%"></i></div></div>
+    </div>
+    ${ev.hs_note?`<div class="note"><b>How the engine maps it:</b> ${esc(ev.hs_note)}</div>`:""}`;
+}
+
+function renderMatches(){
+  const ev = events.find(e=>e.id===selected);
+  const m = ev ? matchEvent(ev) : [];
+  $("#matchCount").textContent = ev ? `· ${m.length} of ${accounts.length}` : "";
+  if(!m.length){ $("#matches").innerHTML = `<div class="empty">No accounts in the book are exposed to this event.</div>`; return; }
+  $("#matches").innerHTML = `<div style="overflow:auto"><table>
+    <tr><th>Score</th><th>Account</th><th>Exposure</th><th>Rate / note</th><th>Why it matched</th><th></th></tr>
+    ${m.map((r,i)=>`<tr class="row" data-i="${i}">
+      <td><div class="score"><div class="bar"><i style="width:${r.score}%"></i></div><b>${r.score}</b></div></td>
+      <td><b>${esc(r.acc.name)}</b><div class="note">${esc(r.acc.segment)} · HQ ${esc(r.acc.hq||"—")}${r.acc.tier?" · Tier "+esc(r.acc.tier):""}${r.acc.stage?" · "+esc(r.acc.stage):""}</div></td>
+      <td>${esc(r.cor.role)}</td>
+      <td>${esc(r.cor.note||"—")}</td>
+      <td><span class="chip">HS ${esc(r.hs.hit)}</span><span class="chip">corridor ${r.cor.score}</span>${r.acc.tier?`<span class="chip">fit ${r.fit}</span>`:""}</td>
+      <td><button class="btn small">Draft campaign</button></td></tr>`).join("")}
+  </table></div>`;
+  document.querySelectorAll("#matches tr.row").forEach(tr=>tr.onclick=()=>openDrawer(ev, m[+tr.dataset.i]));
+}
+
+function renderAccounts(){
+  const j = v => esc((v||[]).join(", ")||"—");
+  $("#accTable").innerHTML = `<tr><th>Account</th><th>Segment</th><th>Sells (HS)</th><th>Buys (HS)</th><th>Produces in</th><th>Suppliers in</th><th>Markets</th><th>Tags</th><th>Tier</th><th>Stage</th><th>Owner</th></tr>` +
+    accounts.map(a=>`<tr><td><b>${a.url?`<a href="${esc(a.url)}" target="_blank" rel="noopener">${esc(a.name)}</a>`:esc(a.name)}</b><div class="note">HQ ${esc(a.hq||"—")}</div></td><td>${esc(a.segment)}</td><td class="mono">${j(a.hs)}</td><td class="mono">${j(a.inputs)}</td><td>${j(a.origins)}</td><td>${j(a.sources)}</td><td>${j(a.markets)}</td><td>${j(a.tags)}</td><td>${esc(a.tier||"—")}</td><td>${esc(a.stage||"—")}</td><td>${esc(a.owner||"—")}</td></tr>`).join("");
+}
+
+function renderQueue(){
+  $("#qCount").textContent = queue.length;
+  if(!queue.length){ $("#queue").innerHTML = `<div class="empty">Nothing approved yet. Open an account under Signals, draft the campaign and approve it.</div>`; return; }
+  $("#queue").innerHTML = `<table><tr><th>Account</th><th>Trigger</th><th>Angle</th><th>Owner</th><th>Score</th><th></th></tr>` +
+    queue.map((q,i)=>`<tr><td><b>${esc(q.account)}</b></td><td>${esc(q.event)}</td><td>${esc(q.angle)}</td><td>${esc(q.owner)}</td><td>${q.score}</td><td><button class="btn ghost small" data-rm="${i}">Remove</button></td></tr>`).join("") + `</table>`;
+  document.querySelectorAll("[data-rm]").forEach(b=>b.onclick=()=>{queue.splice(+b.dataset.rm,1); renderQueue();});
+}
+
+function render(){ renderEvents(); renderDetail(); renderMatches(); renderAccounts(); renderQueue(); }
+
+/* ---------- drawer / campaign ---------- */
+function templateDraft(ev, r){
+  const a = r.acc; const sign = a.owner || "{your_name}";
+  const angle = ev.direction==="threat" ? "Cost-mitigation and supply-chain options" : ev.direction==="opportunity" ? "Market-entry and growth plan" : "Compliance readiness";
+  const impact = ev.direction==="threat"
+    ? `${a.name} looks exposed as ${(r.cor.role.charAt(0).toLowerCase()+r.cor.role.slice(1))}: its product lines in HS ${r.hs.hit} fall within the measure's scope${r.cor.note?" ("+r.cor.note+")":""}. Pricing, contracts and sourcing for ${ev.imposer}-bound business are likely under review${ev.effective_date?" around "+fmtDate(ev.effective_date):""}.`
+    : ev.direction==="opportunity"
+    ? `${a.name} trades HS ${r.hs.hit} and qualifies as ${(r.cor.role.charAt(0).toLowerCase()+r.cor.role.slice(1))}. Lower duties from ${fmtDate(ev.effective_date)} improve price competitiveness in ${ev.imposer}.`
+    : `${a.name} sells HS ${r.hs.hit} into ${ev.imposer}. The new requirements will affect specifications, testing and documentation before ${fmtDate(ev.effective_date)}.`;
+  return {
+    impact_note: impact, angle,
+    email_subject: ev.direction==="threat" ? `What the new ${ev.imposer} duty means for your ${a.segment.toLowerCase()} business` : ev.direction==="opportunity" ? `Getting ahead of the lower duties in ${ev.imposer}` : `Preparing for the new ${ev.imposer} requirements`,
+    email_body: `Hi {first_name},\n\n${ev.summary} (Source: ${ev.source}.)\n\nFor ${a.name}, this matters because ${impact.charAt(0).toLowerCase()+impact.slice(1)}\n\nWe have put together a short briefing on the options companies in your position are looking at. Would a 20-minute call next week be useful?\n\nBest regards,\n${sign}`,
+    linkedin_post: `${ev.title}.\n\n${ev.summary}\n\nFor ${a.segment.toLowerCase()} companies, the next few weeks are about ${angle.toLowerCase()}. We have summarised what to check first. Comment or message us for the briefing.`
+  };
+}
+
+let drawerCtx = null;
+function openDrawer(ev, r){
+  drawerCtx = {ev, r, draft: templateDraft(ev, r), ai:false};
+  paintDrawer();
+  $("#drawer").classList.add("on"); $("#drawerBg").classList.add("on");
+}
+function closeDrawer(){ $("#drawer").classList.remove("on"); $("#drawerBg").classList.remove("on"); }
+$("#drawerBg").onclick = closeDrawer;
+
+function paintDrawer(loading=false, err=""){
+  const {ev, r, draft, ai} = drawerCtx;
+  $("#drawer").innerHTML = `
+    <button class="btn ghost small close" id="dClose">Close</button>
+    <h3>Campaign draft</h3>
+    <h2 style="font-size:18px;margin:0">${esc(r.acc.name)}</h2>
+    <div class="note">${esc(r.cor.role)}${r.cor.note?" · "+esc(r.cor.note):""} · score ${r.score}${r.acc.owner?" · owner "+esc(r.acc.owner):""}</div>
+    <div class="note" style="margin:6px 0 14px">Trigger: ${esc(ev.title)}</div>
+    <div class="row-actions" style="margin:0 0 14px">
+      <button class="btn" id="dAI" ${sampleFn&&!loading?"":"disabled"}>${loading?'<span class="spin"></span>Drafting…':(ai?"Regenerate with AI":"Draft with AI")}</button>
+      <span class="note" style="align-self:center">${ai?"AI draft. Edit any field before approving.":sampleFn?"Showing the rule-based template. Use AI for a tailored draft.":"AI not available in this view. Showing the rule-based template."}</span>
+    </div>
+    ${err?`<div class="err">${esc(err)}</div>`:""}
+    <h3>Impact note</h3><div class="out" contenteditable data-k="impact_note">${esc(draft.impact_note)}</div>
+    <h3>Angle</h3><div class="out" contenteditable data-k="angle">${esc(draft.angle)}</div>
+    <h3>Email subject</h3><div class="out" contenteditable data-k="email_subject">${esc(draft.email_subject)}</div>
+    <h3>Email</h3><div class="out" contenteditable data-k="email_body">${esc(draft.email_body)}</div>
+    <h3>LinkedIn post</h3><div class="out" contenteditable data-k="linkedin_post">${esc(draft.linkedin_post)}</div>
+    <div class="row-actions">
+      <button class="btn" id="dApprove">Approve → queue</button>
+      <button class="btn ghost" id="dCopy">Copy email</button>
+    </div>`;
+  document.querySelectorAll("#drawer .out").forEach(el=>el.oninput=()=>{drawerCtx.draft[el.dataset.k]=el.innerText;});
+  $("#dClose").onclick = closeDrawer;
+  $("#dAI").onclick = aiDraft;
+  $("#dCopy").onclick = async()=>{ try{ await navigator.clipboard.writeText(`Subject: ${drawerCtx.draft.email_subject}\n\n${drawerCtx.draft.email_body}`); toast("Email copied"); }catch(e){ toast("Copy was blocked. Select the text and copy it instead."); } };
+  $("#dApprove").onclick = ()=>{
+    queue.push({account:r.acc.name, owner:r.acc.owner||"—", event:ev.title, angle:drawerCtx.draft.angle, score:r.score, subject:drawerCtx.draft.email_subject, email:drawerCtx.draft.email_body, linkedin:drawerCtx.draft.linkedin_post});
+    renderQueue(); closeDrawer(); toast("Added to the activation queue");
+  };
+}
+
+async function aiDraft(){
+  const {ev, r} = drawerCtx;
+  paintDrawer(true);
+  const prompt = `You are a B2B product marketer at a company that sells to life-sciences and nutraceutical manufacturers. A trade or regulatory trigger event has been detected and matched to an account. Write outreach that is helpful and specific. Lead with useful information, not fear, and never exaggerate the impact. Keep sentences plain and human, without buzzwords. The account's exposure profile is an estimate from public information: do not state internal facts about the company as certain. Say "companies that export X from Y" rather than "you export X".
+
+EVENT:
+${JSON.stringify({title:ev.title,type:ev.type,stage:ev.stage,direction:ev.direction,imposer:ev.imposer,origins:ev.origins,hs:ev.hs,effective_date:ev.effective_date,summary:ev.summary,evidence:ev.evidence})}
+
+ACCOUNT:
+${JSON.stringify({name:r.acc.name,hq:r.acc.hq,segment:r.acc.segment,sells_hs:r.acc.hs,buys_hs:r.acc.inputs,produces_in:r.acc.origins,suppliers_in:r.acc.sources,markets:r.acc.markets,exposure:r.cor.role,rate_note:r.cor.note||"",matched_hs:r.hs.hit,sender:r.acc.owner||"{your_name}"})}
+
+Return ONLY a JSON object with these keys:
+"impact_note": 2-3 sentences for the account owner on how this event affects this account specifically,
+"angle": a campaign angle of at most 8 words,
+"email_subject": at most 10 words,
+"email_body": an email of at most 120 words to a contact at the account, starting "Hi {first_name}," and signed by the sender,
+"linkedin_post": a LinkedIn post of at most 80 words for the company page, aimed at this segment, without naming the account.
+Mention the source (${ev.source}) once in the email.`;
+  try{
+    const val = await sampleFn.json(prompt, {modelTier:"default"});
+    if(!val || !val.email_body) throw {message:"The AI response was incomplete."};
+    drawerCtx.draft = {...drawerCtx.draft, ...val}; drawerCtx.ai = true; paintDrawer();
+  }catch(e){
+    paintDrawer(false, e.code==="not_granted" ? "AI access was not granted for this page." : e.code==="rate_limited" ? "Too many requests. Wait a moment and try again." : ("Could not draft with AI: " + (e.message||"unknown error")));
+  }
+}
+
+/* ---------- new notice ---------- */
+$("#newBtn").onclick = ()=>{ $("#modalErr").textContent=""; $("#modal").classList.add("on"); $("#noticeText").focus(); };
+$("#cancelBtn").onclick = ()=>$("#modal").classList.remove("on");
+$("#extractBtn").onclick = async ()=>{
+  const text = $("#noticeText").value.trim();
+  if(text.length < 40){ $("#modalErr").textContent = "Paste a bit more text: at least a paragraph of the notice."; return; }
+  if(!sampleFn){ $("#modalErr").textContent = "AI extraction is not available in this view. Open the page on claude.ai and allow AI access."; return; }
+  const btn = $("#extractBtn"); btn.disabled = true; btn.innerHTML = '<span class="spin"></span>Extracting…';
+  const prompt = `You extract structured trade and regulatory trigger events from official notices and news. Today is 2026-11-18.
+
+Read the notice and return ONLY a JSON object with these keys:
+"title": a one-line headline starting with the imposing jurisdiction, e.g. "US: ...",
+"type": one of "tariff","trade_agreement","regulation","sanction","export_control","other",
+"stage": one of "proposed","adopted","in_force",
+"direction": "threat" (raises cost or closes access), "opportunity" (lowers cost or opens a market), or "compliance" (new rules to meet),
+"imposer": ISO 3166 alpha-2 code of the country that imposes or grants the measure, or "EU",
+"origins": array of ISO alpha-2 codes or "EU" for the origins whose goods are affected; use [] if all origins are affected,
+"hs": array of 4-digit HS headings covered (strings). Infer the most likely headings from product descriptions if no codes are given,
+"effective_date": "YYYY-MM-DD" or null,
+"severity": integer 1-5 for commercial impact on affected companies,
+"confidence": number 0-1 for how sure you are of the extraction,
+"summary": 2 plain sentences on what changes, for whom, and when,
+"evidence": the single most important phrase copied word for word from the notice, at most 30 words.
+
+NOTICE:
+"""${text.slice(0, 15000)}"""`;
+  try{
+    const v = await sampleFn.json(prompt, {modelTier:"default"});
+    if(!v || !v.title || !Array.isArray(v.hs)) throw {message:"The AI could not find a trade or regulatory event in this text."};
+    const ev = {
+      id:"u"+Date.now(), title:String(v.title), type:v.type||"other", stage:v.stage||"proposed",
+      direction:["threat","opportunity","compliance"].includes(v.direction)?v.direction:"threat",
+      imposer:String(v.imposer||"").toUpperCase(), origins:(v.origins||[]).map(x=>String(x).toUpperCase()),
+      hs:v.hs.map(x=>String(x).replace(/\D/g,"").slice(0,4)).filter(x=>x.length>=2),
+      effective_date:/^\d{4}-\d{2}-\d{2}$/.test(v.effective_date||"")?v.effective_date:null,
+      published:"2026-11-18", severity:Math.max(1,Math.min(5,parseInt(v.severity)||3)), confidence:+v.confidence||0.5,
+      summary:String(v.summary||""), evidence:String(v.evidence||""),
+      source: $("#srcUrl").value.trim() ? "Source" : "Pasted notice", url: /^https?:\/\//.test($("#srcUrl").value.trim()) ? $("#srcUrl").value.trim() : null
+    };
+    events.unshift(ev); selected = ev.id;
+    $("#modal").classList.remove("on"); $("#noticeText").value=""; $("#srcUrl").value="";
+    render(); toast(`Event extracted · ${matchEvent(ev).length} accounts affected`);
+  }catch(e){
+    $("#modalErr").textContent = e.code==="not_granted" ? "AI access was not granted for this page." : e.code==="rate_limited" ? "Too many requests. Wait a moment and try again." : (e.message||"Extraction failed.");
+  }finally{ btn.disabled=false; btn.textContent="Extract event with AI"; }
+};
+
+/* ---------- CSV ---------- */
+function parseCSV(t){
+  const rows=[]; let row=[], cur="", q=false;
+  for(let i=0;i<t.length;i++){ const c=t[i];
+    if(q){ if(c=='"'&&t[i+1]=='"'){cur+='"';i++;} else if(c=='"') q=false; else cur+=c; }
+    else if(c=='"') q=true; else if(c==','){row.push(cur);cur="";} else if(c=='\n'||c=='\r'){ if(c=='\r'&&t[i+1]=='\n') i++; row.push(cur); rows.push(row); row=[]; cur=""; } else cur+=c; }
+  if(cur||row.length){row.push(cur);rows.push(row);}
+  return rows.filter(r=>r.some(x=>x.trim()));
+}
+$("#csvIn").onchange = async e=>{
+  const f = e.target.files[0]; if(!f) return;
+  const rows = parseCSV(await f.text()); const head = rows.shift().map(h=>h.trim().toLowerCase());
+  const idx = k => head.indexOf(k); const split = v => (v||"").split(";").map(x=>x.trim()).filter(Boolean);
+  if(idx("name")<0 || idx("hs")<0){ toast("The CSV needs at least 'name' and 'hs' columns"); return; }
+  accounts = rows.map(r=>({name:r[idx("name")]?.trim(), hq:(r[idx("hq")]||"").trim().toUpperCase(), url:"", segment:r[idx("segment")]?.trim()||"", hs:split(r[idx("hs")]), inputs:split(r[idx("inputs")]), tags:split(r[idx("tags")]).map(x=>x.toLowerCase()),
+    origins:split(r[idx("origins")]).map(x=>x.toUpperCase()), sources:split(r[idx("sources")]).map(x=>x.toUpperCase()), markets:split(r[idx("markets")]).map(x=>x.toUpperCase()),
+    tier:(r[idx("tier")]||"").trim().toUpperCase(), stage:r[idx("stage")]?.trim()||"", owner:r[idx("owner")]?.trim()||""})).filter(a=>a.name);
+  render(); toast(`${accounts.length} accounts imported`); e.target.value="";
+};
+$("#resetAcc").onclick = ()=>{ accounts = JSON.parse(JSON.stringify(REAL_ACCOUNTS)); render(); toast("Real account book restored"); };
+
+const csvCell = v => `"${String(v??"").replace(/"/g,'""')}"`;
+async function copyText(t, msg){ try{ await navigator.clipboard.writeText(t); toast(msg); }catch(e){ toast("Copy was blocked by the browser"); } }
+$("#copyMatches").onclick = ()=>{
+  const ev = events.find(e=>e.id===selected); if(!ev) return;
+  const m = matchEvent(ev);
+  copyText(["score,account,exposure,matched_hs,tier,stage,owner,event", ...m.map(r=>[r.score,r.acc.name,r.cor.role,r.hs.hit,r.acc.tier,r.acc.stage,r.acc.owner,ev.title].map(csvCell).join(","))].join("\n"), `${m.length} rows copied`);
+};
+$("#copyQueue").onclick = ()=> copyText(["account,owner,trigger,angle,score,email_subject,email_body,linkedin_post", ...queue.map(q=>[q.account,q.owner,q.event,q.angle,q.score,q.subject,q.email,q.linkedin].map(csvCell).join(","))].join("\n"), `${queue.length} rows copied`);
+
+/* ---------- nav ---------- */
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{
+  document.querySelectorAll("nav button").forEach(x=>x.classList.toggle("on",x===b));
+  document.querySelectorAll(".view").forEach(v=>v.classList.toggle("on", v.id==="v-"+b.dataset.v));
+});
+
+/* ---------- AI hookup ---------- */
+function setAI(on){ $("#aiStatus").innerHTML = on ? "AI: <b>connected</b>" : "AI: not available here · rule-based mode"; }
+render();
+if(window.claude && typeof window.claude.use==="function"){
+  window.claude.use("sample").then(s=>{ sampleFn = s; setAI(!!s); }).catch(()=>setAI(false));
+} else setAI(false);
+</script>
+</body>
+</html>
